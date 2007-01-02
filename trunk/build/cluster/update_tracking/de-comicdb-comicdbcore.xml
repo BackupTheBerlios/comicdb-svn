@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<module codename="de.comicdb.comicdbcore/0">
+<module_version install_time="1167767879974" last="true" origin="installer" specification_version="2.1">
+<file crc="1264397888" name="config/Modules/de-comicdb-comicdbcore.xml"/>
+<file crc="3990145021" name="modules/de-comicdb-comicdbcore.jar"/>
+</module_version>
+</module>

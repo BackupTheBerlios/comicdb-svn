@@ -1,0 +1,5 @@
+Manifest-Version: 1.0
+OpenIDE-Module: de.comicdb.comicdbcore/0
+OpenIDE-Module-Implementation-Version: 1
+OpenIDE-Module-Layer: de/comicdb/comicdbcore/layer.xml
+OpenIDE-Module-Localizing-Bundle: de/comicdb/comicdbcore/Bundle.properties

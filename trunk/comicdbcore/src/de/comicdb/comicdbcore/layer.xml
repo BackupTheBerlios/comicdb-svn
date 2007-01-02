@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE filesystem PUBLIC "-//NetBeans//DTD Filesystem 1.1//EN" "http://www.netbeans.org/dtds/filesystem-1_1.dtd">
+<filesystem>
+    <folder name="Actions">
+        <folder name="Edit">
+            <file name="de-comicdb-comicdbcore-OpenComicDBAction.instance">
+                <attr name="instanceClass" stringvalue="de.comicdb.comicdbcore.OpenComicDBAction"/>
+            </file>
+            <attr name="de-comicdb-comicdbcore-OpenComicDBAction.instance/de-comicdb-comicdbcore-NewComicDBAction.instance" boolvalue="true"/>
+            <file name="de-comicdb-comicdbcore-NewComicDBAction.instance">
+                <attr name="instanceClass" stringvalue="de.comicdb.comicdbcore.NewComicDBAction"/>
+            </file>
+            <attr name="de-comicdb-comicdbcore-NewComicDBAction.instance/de-comicdb-comicdbcore-SaveComicDBAction.instance" boolvalue="true"/>
+            <file name="de-comicdb-comicdbcore-SaveComicDBAction.instance">
+                <attr name="instanceClass" stringvalue="de.comicdb.comicdbcore.SaveComicDBAction"/>
+            </file>
+            <attr name="de-comicdb-comicdbcore-SaveComicDBAction.instance/org-openide-actions-CopyAction.instance" boolvalue="true"/>
+            <attr name="org-openide-actions-GotoAction.instance/org-openide-actions-OpenAction.instance" boolvalue="true"/>
+            <attr name="org-openide-actions-OpenAction.instance/org-openide-actions-PasteAction.instance" boolvalue="true"/>
+        </folder>
+        <folder name="Window">
+            <file name="de-comicdb-comicdbcore-ComicDBExplorerAction.instance"/>
+        </folder>
+    </folder>
+    <folder name="Menu">
+        <folder name="File">
+            <file name="org-openide-actions-OpenAction.shadow">
+                <attr name="orginalFile" stringvalue="Actions/Edit/org-openide-actions-OpenAction.instance"/>
+            </file>
+            <attr name="org-openide-actions-OpenAction.shadow/de-comicdb-comicdbcore-separatorBefore.instance" boolvalue="true"/>
+            <attr name="org-openide-actions-OpenAction.shadow/de-comicdb-comicdbcore-NewComicDBAction.shadow" boolvalue="true"/>
+            <file name="de-comicdb-comicdbcore-NewComicDBAction.shadow">
+                <attr name="originalFile" stringvalue="Actions/Edit/de-comicdb-comicdbcore-NewComicDBAction.instance"/>
+            </file>
+            <attr name="de-comicdb-comicdbcore-NewComicDBAction.shadow/de-comicdb-comicdbcore-separatorBefore.instance" boolvalue="true"/>
+            <file name="de-comicdb-comicdbcore-separatorBefore.instance">
+                <attr name="instanceClass" stringvalue="javax.swing.JSeparator"/>
+            </file>
+            <attr name="de-comicdb-comicdbcore-separatorBefore.instance/de-comicdb-comicdbcore-OpenComicDBAction.shadow" boolvalue="true"/>
+            <file name="de-comicdb-comicdbcore-OpenComicDBAction.shadow">
+                <attr name="originalFile" stringvalue="Actions/Edit/de-comicdb-comicdbcore-OpenComicDBAction.instance"/>
+            </file>
+            <attr name="de-comicdb-comicdbcore-OpenComicDBAction.shadow/de-comicdb-comicdbcore-separatorAfter.instance" boolvalue="true"/>
+            <file name="de-comicdb-comicdbcore-separatorAfter.instance">
+                <attr name="instanceClass" stringvalue="javax.swing.JSeparator"/>
+            </file>
+            <attr name="de-comicdb-comicdbcore-separatorAfter.instance/Separator2.instance" boolvalue="true"/>
+            <attr name="Separator2.instance/de-comicdb-comicdbcore-SaveComicDBAction.shadow" boolvalue="true"/>
+            <file name="de-comicdb-comicdbcore-SaveComicDBAction.shadow">
+                <attr name="originalFile" stringvalue="Actions/Edit/de-comicdb-comicdbcore-SaveComicDBAction.instance"/>
+            </file>
+            <attr name="de-comicdb-comicdbcore-SaveComicDBAction.shadow/org-openide-actions-SaveAction.instance" boolvalue="true"/>
+        </folder>
+        <folder name="Tools">
+            <attr name="org-netbeans-modules-autoupdate-UpdateAction.instance/de-comicdb-comicdbcore-separatorBefore.instance" boolvalue="true"/>
+            <file name="de-comicdb-comicdbcore-separatorBefore.instance">
+                <attr name="instanceClass" stringvalue="javax.swing.JSeparator"/>
+            </file>
+        </folder>
+        <folder name="Window">
+            <file name="ComicDBExplorerAction.shadow">
+                <attr name="originalFile" stringvalue="Actions/Window/de-comicdb-comicdbcore-ComicDBExplorerAction.instance"/>
+            </file>
+        </folder>
+    </folder>
+    <folder name="Services">
+        <folder name="MIMEResolver"/>
+    </folder>
+    <folder name="Shortcuts">
+        <file name="O-N.shadow">
+            <attr name="originalFile" stringvalue="Actions/Edit/de-comicdb-comicdbcore-NewComicDBAction.instance"/>
+        </file>
+        <file name="O-S.shadow">
+            <attr name="originalFile" stringvalue="Actions/Edit/de-comicdb-comicdbcore-SaveComicDBAction.instance"/>
+        </file>
+    </folder>
+    <folder name="Toolbars">
+        <folder name="File">
+            <file name="de-comicdb-comicdbcore-OpenComicDBAction.shadow">
+                <attr name="originalFile" stringvalue="Actions/Edit/de-comicdb-comicdbcore-OpenComicDBAction.instance"/>
+            </file>
+            <attr name="de-comicdb-comicdbcore-OpenComicDBAction.shadow/org-openide-actions-SaveAllAction.instance" boolvalue="true"/>
+            <attr name="de-comicdb-comicdbcore-OpenComicDBAction.shadow/de-comicdb-comicdbcore-NewComicDBAction.shadow" boolvalue="true"/>
+            <file name="de-comicdb-comicdbcore-NewComicDBAction.shadow">
+                <attr name="originalFile" stringvalue="Actions/Edit/de-comicdb-comicdbcore-NewComicDBAction.instance"/>
+            </file>
+        <attr name="de-comicdb-comicdbcore-NewComicDBAction.shadow/org-openide-actions-SaveAllAction.instance" boolvalue="true"/>
+            <attr name="de-comicdb-comicdbcore-NewComicDBAction.shadow/de-comicdb-comicdbcore-SaveComicDBAction.shadow" boolvalue="true"/>
+            <file name="de-comicdb-comicdbcore-SaveComicDBAction.shadow">
+                <attr name="originalFile" stringvalue="Actions/Edit/de-comicdb-comicdbcore-SaveComicDBAction.instance"/>
+            </file>
+            <attr name="de-comicdb-comicdbcore-SaveComicDBAction.shadow/org-openide-actions-SaveAllAction.instance" boolvalue="true"/>
+        </folder>
+    </folder>
+    <folder name="Windows2">
+        <folder name="Components">
+            <file name="ComicDBExplorerTopComponent.settings" url="ComicDBExplorerTopComponentSettings.xml"/>
+            <file name="ComicTopComponent.settings" url="ComicTopComponentSettings.xml"/>
+        </folder>
+        <folder name="Modes">
+            <folder name="explorer">
+                <file name="ComicDBExplorerTopComponent.wstcref" url="ComicDBExplorerTopComponentWstcref.xml"/>
+            </folder>
+        </folder>
+    </folder>
+</filesystem>
