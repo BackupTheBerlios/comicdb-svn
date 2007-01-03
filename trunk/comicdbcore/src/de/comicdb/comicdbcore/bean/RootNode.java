@@ -126,6 +126,8 @@ public class RootNode extends AbstractNode {
                         } else {
                             publisher_1 = publisher;
                         }
+                        ComicDBChildren children = (ComicDBChildren)getChildren();
+                        children.getComicDB().getPublisher().add(publisher_1);
                         getChildren().add( new Node[] { new PublisherNode(publisher_1) } );
                         if( (action & DnDConstants.ACTION_MOVE) != 0 ) {
                             dropNode.getParentNode().getChildren().remove( new Node[] {dropNode} );

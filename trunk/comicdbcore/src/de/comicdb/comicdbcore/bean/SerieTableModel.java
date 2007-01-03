@@ -24,6 +24,7 @@ public class SerieTableModel extends AbstractTableModel implements ListDataListe
     private static int max_column = 4;
     
     public ListModel model;
+    private int lastRowCount = 0;
     
     public SerieTableModel(ListModel model) {
         super();
@@ -37,8 +38,13 @@ public class SerieTableModel extends AbstractTableModel implements ListDataListe
     
     public int getRowCount() {
         int rows = model.getSize() / max_column;
-        if (model.getSize() > 0 && rows == 0)
-            rows = 1;
+        int remain = model.getSize() % max_column;
+        if (model.getSize() > 0 && remain > 0)
+            rows += 1;
+        if (lastRowCount < rows) {
+            lastRowCount = rows;
+            fireTableDataChanged();
+        }
         return rows;
     }
     

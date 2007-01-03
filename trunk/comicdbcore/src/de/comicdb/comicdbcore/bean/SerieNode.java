@@ -133,9 +133,9 @@ public class SerieNode extends AbstractNode implements PropertyChangeListener {
     
     public void destroy() throws IOException {
         SerieChildren children = (SerieChildren)getParentNode().getChildren();
-        children.remove(new Node[] {this});
         children.getPublisher().getSeries().remove(serie);
-        children.addNotify();
+        children.remove(new Node[] {this});
+//        children.addNotify();
     }
     
     public void setSerie(Serie serie) {
@@ -183,6 +183,7 @@ public class SerieNode extends AbstractNode implements PropertyChangeListener {
                         } else {
                             comic_1 = comic;
                         }
+                        serie.getComics().add(comic_1);
                         getChildren().add( new Node[] { new ComicNode(comic_1) } );
                         if( (action & DnDConstants.ACTION_MOVE) != 0 ) {
                             dropNode.getParentNode().getChildren().remove( new Node[] {dropNode} );

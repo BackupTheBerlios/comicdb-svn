@@ -134,9 +134,9 @@ public class PublisherNode extends AbstractNode implements PropertyChangeListene
     
     public void destroy() throws IOException {
         PublisherChildren children = (PublisherChildren)getParentNode().getChildren();
-        children.remove(new Node[] {this});
         children.getComicdb().getPublisher().remove(publisher);
-        children.addNotify();
+        children.remove(new Node[] {this});
+//        children.addNotify();
     }
     
     public Publisher getPublisher() {
@@ -188,6 +188,7 @@ public class PublisherNode extends AbstractNode implements PropertyChangeListene
                         } else {
                             serie_1 = serie;
                         }
+                        publisher.getSeries().add(serie_1);
                         getChildren().add( new Node[] { new SerieNode(serie_1) } );
                         if( (action & DnDConstants.ACTION_MOVE) != 0 ) {
                             dropNode.getParentNode().getChildren().remove( new Node[] {dropNode} );

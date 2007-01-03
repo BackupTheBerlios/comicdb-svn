@@ -93,9 +93,8 @@ public class ComicNode extends AbstractNode implements PropertyChangeListener {
 
     public void destroy() throws IOException {
         ComicChildren children = (ComicChildren)getParentNode().getChildren();
-        children.remove(new Node[] {this});
         children.getSerie().getComics().remove(getComic());
-        children.addNotify();
+        children.remove(new Node[] {this});
     }
 
     public void propertyChange(PropertyChangeEvent propertyChangeEvent) {

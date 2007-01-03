@@ -53,20 +53,24 @@ public class ComicTableCellRenderer extends JLabel implements TableCellRenderer{
             setBorder(BorderFactory.createEmptyBorder(1, 1, 1, 1));
             setBackground(UIManager.getColor("Panel.background"));
         }
+        
         if (value == null) {
             setIcon(null);
             setText(null);
             
-        } else if (value instanceof ImageIcon) {
-            setIcon((ImageIcon)(value));
-            if(getPreferredSize().height != table.getRowHeight(row)) {
-                table.setRowHeight(row, getPreferredSize().height);
+        } else if (value instanceof Comic) {
+            Comic comic = (Comic)value;
+            if (comic.getImage() != null) {
+                setIcon(comic.getImage());
+                if(getPreferredSize().height != table.getRowHeight(row)) {
+                    table.setRowHeight(row, getPreferredSize().height);
+                }
+                setText(null);
+            } else {
+                setIcon(null);
+                setText(comic.getName() + " " + comic.getNr());
             }
-            setText(null);
-            
-        } else {
-            setIcon(null);
-            setText((String)value);
+            setToolTipText(comic.getName() + " " + comic.getNr());
         }        
         
         return this;

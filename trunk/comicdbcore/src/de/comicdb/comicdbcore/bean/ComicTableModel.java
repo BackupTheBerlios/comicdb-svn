@@ -24,6 +24,7 @@ public class ComicTableModel extends AbstractTableModel implements ListDataListe
     private static int max_column = 4;
     
     public ListModel model;
+    private int lastRowCount = 0;
     
     public ComicTableModel(ListModel model) {
         super();
@@ -40,6 +41,10 @@ public class ComicTableModel extends AbstractTableModel implements ListDataListe
         int remain = model.getSize() % max_column;
         if (model.getSize() > 0 && remain > 0)
             rows += 1;
+        if (lastRowCount < rows) {
+            lastRowCount = rows;
+            fireTableDataChanged();
+        }
         return rows;
     }
     
@@ -57,26 +62,23 @@ public class ComicTableModel extends AbstractTableModel implements ListDataListe
     public Object getValueAt(int row, int col) {
         Comic comic = (Comic) getElementAt(row, col);
         if (comic != null) {
-            if (comic.getImage() != null)
-                return comic.getImage();
-            return comic.getName() + " " + comic.getNr();
+            return comic;
         }
         return null;
     }
     
     public void intervalRemoved(ListDataEvent event) {
-        fireTableRowsDeleted(event.getIndex0(), event.getIndex1());
+//        fireTableRowsDeleted(event.getIndex0(), event.getIndex1());
         fireTableStructureChanged();
     }
     
     public void intervalAdded(ListDataEvent event) {
-        fireTableRowsInserted(event.getIndex0(), event.getIndex1());
+//        fireTableRowsInserted(event.getIndex0(), event.getIndex1());
         fireTableStructureChanged();
     }
     
     public void contentsChanged(ListDataEvent event) {
-        fireTableRowsUpdated(event.getIndex0(), event.getIndex1());
+//        fireTableRowsUpdated(event.getIndex0(), event.getIndex1());
         fireTableStructureChanged();
-        
     }
 }
