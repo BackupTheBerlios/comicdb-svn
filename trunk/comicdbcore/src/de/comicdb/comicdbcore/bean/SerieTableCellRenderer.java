@@ -9,8 +9,8 @@
 
 package de.comicdb.comicdbcore.bean;
 
-import java.awt.Color;
 import java.awt.Component;
+import java.awt.Image;
 import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
@@ -58,17 +58,31 @@ public class SerieTableCellRenderer extends JLabel implements TableCellRenderer{
             setText(null);
             
         } else if (value instanceof ImageIcon) {
-            setIcon((ImageIcon)(value));
+            ImageIcon icon = (ImageIcon) value;
+            setIcon(icon);
             if(getPreferredSize().height != table.getRowHeight(row)) {
                 table.setRowHeight(row, getPreferredSize().height);
             }
             setText(null);
-            
+            int columnWidth = table.getColumnModel().getColumn(column).getWidth();
+            if (icon.getIconWidth() > columnWidth ) {
+                double scale = (double)((icon.getIconWidth() - columnWidth) / 3) / 100;
+                setIcon(getScaledImage(icon, scale));
+            }
         } else {
             setIcon(null);
             setText((String)value);
-        }        
+        }
         
         return this;
     }
+    
+    public ImageIcon getScaledImage(ImageIcon myLoadedImageIcon, double scaleFactor) {
+        Image myImage = myLoadedImageIcon.getImage();
+        int scaledX = (int) (scaleFactor * myImage.getWidth(null));
+        int scaledY = (int) (scaleFactor * myImage.getHeight(null));
+        Image scaledImage  = myImage.getScaledInstance(scaledX , scaledY, Image.SCALE_SMOOTH);
+        return new ImageIcon(scaledImage);
+    }
+    
 }

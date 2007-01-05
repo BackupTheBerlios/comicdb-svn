@@ -2,29 +2,37 @@
  * ComicDB - overview you comics
  * Copyright (C) 2006  Daniel Moos
  *
- * This program is free software; you can redistribute it and/or modify it under 
- * the terms of the GNU General Public License as published by the Free Software 
- * Foundation; either version 2 of the License, or (at your option) any later 
+ * This program is free software; you can redistribute it and/or modify it under
+ * the terms of the GNU General Public License as published by the Free Software
+ * Foundation; either version 2 of the License, or (at your option) any later
  * version.
  *
- * This program is distributed in the hope that it will be useful, 
- * but WITHOUT ANY WARRANTY; without even the implied warranty of 
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
  * See the GNU General Public License for more details.
  *
- * You should have received a copy of the GNU General Public License along with 
- * this program; if not, write to the Free Software Foundation, Inc., 51 Franklin 
+ * You should have received a copy of the GNU General Public License along with
+ * this program; if not, write to the Free Software Foundation, Inc., 51 Franklin
  * St, Fifth Floor, Boston, MA 02110, USA
  */
 package de.comicdb.comicdbcore.bean;
 
+import java.awt.Graphics2D;
 import java.awt.event.ActionEvent;
+import java.awt.image.BufferedImage;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
+import java.io.File;
 import java.io.IOException;
+import java.text.DateFormat;
+import java.text.DecimalFormat;
+import java.text.SimpleDateFormat;
 import java.util.ResourceBundle;
+import javax.imageio.ImageIO;
 import javax.swing.AbstractAction;
 import javax.swing.Action;
+import javax.swing.ImageIcon;
 import org.openide.actions.CopyAction;
 import org.openide.actions.CutAction;
 import org.openide.actions.DeleteAction;
@@ -47,11 +55,11 @@ public class ComicNode extends AbstractNode implements PropertyChangeListener {
     /** Creates a new instance of ComicDBNode */
     public ComicNode(Comic comic) {
         super( Children.LEAF, Lookups.singleton(comic) );
-        setDisplayName(comic.getName() + " " + comic.getNr().toString());
+//        setDisplayName(comic.getName() + " " + comic.getNr().toString());
         setIconBaseWithExtension("de/comicdb/comicdbcore/cdb_16x16.png");
         setComic(comic);
     }
-        
+    
     public Action[] getActions(boolean popup) {
         return new Action[] {
             getPreferredAction(),
@@ -62,7 +70,7 @@ public class ComicNode extends AbstractNode implements PropertyChangeListener {
             null,
             SystemAction.get( DeleteAction.class ) };
     }
-
+    
     public Action getPreferredAction() {
         return new AbstractAction(NbBundle.getMessage(ComicNode.class,"LBL_Show")) {
             public void actionPerformed(ActionEvent e) {
@@ -73,11 +81,11 @@ public class ComicNode extends AbstractNode implements PropertyChangeListener {
             }
         };
     }
-
+    
     public Comic getComic() {
         return comic;
     }
-
+    
     public void setComic(Comic comic) {
         if (this.comic != null)
             this.comic.removePropertyChangeListener(this);
@@ -86,42 +94,120 @@ public class ComicNode extends AbstractNode implements PropertyChangeListener {
             comic.addPropertyChangeListener(this);
         
     }
-
+    
     public boolean canDestroy() {
         return true;
     }
-
+    
     public void destroy() throws IOException {
         ComicChildren children = (ComicChildren)getParentNode().getChildren();
         children.getSerie().getComics().remove(getComic());
         children.remove(new Node[] {this});
     }
-
+    
     public void propertyChange(PropertyChangeEvent propertyChangeEvent) {
-        setDisplayName(comic.getName() + " " + comic.getNr().toString());
+//        setDisplayName(comic.getName() + " " + comic.getNr().toString());
         fireShortDescriptionChange(null, getShortDescription());
+        fireDisplayNameChange(null, getHtmlDisplayName());
     }
-
+    
     public String getShortDescription() {
-        String ret = "<html>";
-        
-        ret += "<b>" + getDisplayName() + "</b><br>";
-        StoryList storys = getComic().getStorys();
-        if (storys != null && storys.size() > 0) {
-            ret += "<br>"+ NbBundle.getMessage(ComicNode.class, "LBL_Story") + "<br><table>";
-            for (int i = 0; i < storys.size(); i++) {
-                ret += "<tr>";
-                ret += "<td>" + ((Story)storys.get(i)).getName() + "</td>";
-                ret += "<td>" + ((Story)storys.get(i)).getAuthor() + "</td>";
-                ret += "<td>" + ((Story)storys.get(i)).getPainter() + "</td>";
-                ret += "</tr>";
+        StringBuffer ret = new StringBuffer("<html><body");
+        ret.append("<TABLE width=\"100%\" cellspacing=\"1\" border=\"0\" cellpadding=\"0\" align=\"center\">");
+        ret.append("<TR>");
+        ret.append("<TD align=\"center\"><b>");
+        ret.append(getHTMLName());
+        ret.append("</b></TD>");
+        ret.append("<TD rowspan=\"5\">");
+        if (getComic().getImage() != null) {
+            File img = new File(getComic().getImage().getDescription());
+            if (!img.exists()) {
+                img = createTempImage(getComic().getImage(), img);
             }
-            ret += "</table><br>";
+            ret.append("<img src=\"file:");
+            ret.append(img.getAbsolutePath());
+            ret.append("\">");
+        } else {
+            ret.append("&nbsp;");
         }
+        ret.append("</TD>");
+        ret.append("</TR>");
         
-        if (getComic().getNotes() != null)
-            ret += "<br><br>"  + getComic().getNotes();
+        ret.append("<TR><TD>&nbsp;</TD></TR>");
         
-        return ret+="</html>";
+        ret.append("<TR><TD>");
+        ret.append(NbBundle.getMessage(ComicNode.class, "LBL_COMIC_STATE") + " " + getComic().getState());
+        ret.append("</TD></TR>");
+
+        DecimalFormat def = new DecimalFormat("##0.00");
+        ret.append("<TR><TD>");
+        ret.append(NbBundle.getMessage(ComicNode.class, "LBL_COMIC_COVER_PRICE") + " " + def.format(getComic().getCoverprice().doubleValue()));
+        ret.append("</TD></TR>");
+        
+        DateFormat df = new SimpleDateFormat(java.util.ResourceBundle.getBundle("de/comicdb/comicdbcore/bean/Bundle").getString("format.date"));
+        ret.append("<TR><TD>");
+        ret.append(NbBundle.getMessage(ComicNode.class, "LBL_COMIC_PAYDATE") + " " + df.format(getComic().getPaydate()));
+        ret.append("</TD></TR>");
+        
+        ret.append("<TR><TD>");
+        ret.append(NbBundle.getMessage(ComicNode.class, "LBL_COMIC_STORIES_QUANTITY") + " " + getComic().getStorys().size());
+        ret.append("</TD></TR>");
+        
+        ret.append("<TR><TD colspan=\"2\">&nbsp;</TD></TR>");
+        
+        if (getComic().getNotes() != null) {
+            ret.append("<TR><TD colspan=\"2\">");
+            ret.append(getComic().getNotes());
+            ret.append("</TD></TR>");
+        }
+        ret.append("</TABLE>");
+        
+        ret.append("</body></html>");
+        return ret.toString();
+    }
+    
+    private File createTempImage(ImageIcon icon, File oldFile) {
+        File tmp = new File(System.getProperties().getProperty("java.io.tmpdir"));
+        File ret = new File(tmp, oldFile.getName());
+        ret.deleteOnExit();
+        if (ret.exists())
+            return ret;
+        BufferedImage bi = new BufferedImage(icon.getIconWidth(), icon.getIconHeight(), BufferedImage.TYPE_INT_RGB );
+        Graphics2D g2d = bi.createGraphics();
+        g2d.drawImage(icon.getImage(), 0, 0, null);
+        try {
+            ImageIO.write(bi, "png", ret);
+        } catch (IOException ioe) {
+            ioe.printStackTrace();
+        }
+        return ret;
+    }
+    
+    public String getHtmlDisplayName() {
+
+        StringBuffer ret = new StringBuffer("<html>");
+        ret.append(getHTMLName());
+        ret.append("</html>");
+        return ret.toString();
+//        return comic.getName() + " " + comic.getNr().toString();
+    }
+    
+    private String getHTMLName() {
+        String name = comic.getName() + " " + comic.getNr().toString();
+        StringBuffer ret = new StringBuffer();
+        if (comic.getState() != null) {
+            if (comic.getState() == State.STATE_SEARCH) {
+                ret.append("<font color=\"#FFFF00\">" + name + "</font>");
+            } else if (comic.getState() == State.STATE_NECESSARY) {
+                ret.append("<font color=\"#FF0000\">" + name + "</font>");
+            } else if (comic.getState() == State.STATE_ORDER) {
+                ret.append("<font color=\"#0000FF\">" + name + "</font>");
+            } else if (comic.getState() == State.STATE_MY_OWN) {
+                ret.append(name);
+            }
+        } else {
+            ret.append(name);
+        }
+        return ret.toString();
     }
 }

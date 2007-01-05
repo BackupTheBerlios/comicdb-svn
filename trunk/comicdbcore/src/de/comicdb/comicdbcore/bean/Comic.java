@@ -32,7 +32,8 @@ import javax.swing.ImageIcon;
  */
 public class Comic extends Model implements Serializable, PropertyChangeListener {
     private String name;
-    private String covertype;
+    private String covertype = "";
+    private String comictype = "";
     private String notes;
     
     private Double coverprice = new Double(0.0);
@@ -48,11 +49,12 @@ public class Comic extends Model implements Serializable, PropertyChangeListener
     private Date paydate = new Date();
     private Date modified = new Date();
     
-    
     private ImageIcon image;
     
+    private State state = null;
     private StoryList storys = new StoryList();
     
+    private static final long serialVersionUID = 3466540581914608662L;//2385637788427871011L; //3466540581914608662;
     /** Creates a new instance of Comic */
     public Comic() {
         super();
@@ -214,5 +216,23 @@ public class Comic extends Model implements Serializable, PropertyChangeListener
     public void propertyChange(PropertyChangeEvent evt) {
         if (evt.getSource() instanceof StoryList)
             firePropertyChange("storys", null, getStorys());
+    }
+
+    public String getComictype() {
+        return comictype;
+    }
+
+    public void setComictype(String comictype) {
+        this.comictype = comictype;
+    }
+
+    public State getState() {
+        return state;
+    }
+
+    public void setState(State state) {
+        State oldValue = this.state;
+        this.state = state;
+        firePropertyChange("state", oldValue, this.state);
     }
 }

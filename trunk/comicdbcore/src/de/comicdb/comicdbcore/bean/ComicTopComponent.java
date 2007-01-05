@@ -20,6 +20,7 @@ package de.comicdb.comicdbcore.bean;
 
 import com.jgoodies.binding.PresentationModel;
 import com.jgoodies.binding.adapter.BasicComponentFactory;
+import com.jgoodies.binding.adapter.ComboBoxAdapter;
 import com.jgoodies.binding.list.SelectionInList;
 import com.jgoodies.binding.value.Trigger;
 import de.comicdb.comicdbcore.options.ComicDBOption;
@@ -32,6 +33,7 @@ import java.beans.PropertyChangeListener;
 import java.io.Serializable;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import javax.swing.AbstractAction;
@@ -62,14 +64,31 @@ public final class ComicTopComponent extends TopComponent implements PropertyCha
     
     private PresentationModel adapter = new PresentationModel(comic, trigger);
     
+    ArrayList comicTypes = new ArrayList();
+    ArrayList coverTypes = new ArrayList();
+    
     private ComicTopComponent() {
+        initComicTypes();
+        initCoverTypes();
         initComponents();
         setName(NbBundle.getMessage(ComicTopComponent.class, "CTL_ComicTopComponent"));
         setToolTipText(NbBundle.getMessage(ComicTopComponent.class, "HINT_ComicTopComponent"));
         setIcon(Utilities.loadImage(ICON_PATH, true));
         adapter.addPropertyChangeListener(this);
     }
+
+    private void initComicTypes() {
+//        Heft/Album/Magazin/Buch/Piccolo    
+        comicTypes.add(NbBundle.getMessage(ComicTopComponent.class, "LBL_COMIC_COMICTYPE_BOOKLET"));
+        comicTypes.add(NbBundle.getMessage(ComicTopComponent.class, "LBL_COMIC_COMICTYPE_ALBUM"));
+        comicTypes.add(NbBundle.getMessage(ComicTopComponent.class, "LBL_COMIC_COMICTYPE_MAGAZINE"));
+        comicTypes.add(NbBundle.getMessage(ComicTopComponent.class, "LBL_COMIC_COMICTYPE_BOOK"));
+        comicTypes.add(NbBundle.getMessage(ComicTopComponent.class, "LBL_COMIC_COMICTYPE_PICCOLO"));
+    }
     
+    private void initCoverTypes() {
+        coverTypes.add(NbBundle.getMessage(ComicTopComponent.class, "LBL_COMIC_COVERTYPE_VARIANT"));
+    }
     /** This method is called from within the constructor to
      * initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is
@@ -85,8 +104,8 @@ public final class ComicTopComponent extends TopComponent implements PropertyCha
         jButtonAccept = new javax.swing.JButton();
         jButtonCancel = new javax.swing.JButton();
         jLabelNr = new javax.swing.JLabel();
-        jLabelCoverType = new javax.swing.JLabel();
-        jComboBoxCoverType = BasicComponentFactory.createComboBox(new SelectionInList(adapter.getBufferedModel("covertype")));
+        jLabelComicType = new javax.swing.JLabel();
+        jComboBoxComicType = new javax.swing.JComboBox();
         jLabelCoverPrice = new javax.swing.JLabel();
         jTextFieldCoverPrice = BasicComponentFactory.createFormattedTextField(adapter.getBufferedModel("coverprice"),new DecimalFormat("##0.00"));
         jLabelPrice = new javax.swing.JLabel();
@@ -117,6 +136,10 @@ public final class ComicTopComponent extends TopComponent implements PropertyCha
         jTextFieldQuantity = BasicComponentFactory.createIntegerField(adapter.getBufferedModel("quantity"));
         jLabelPageCount = new javax.swing.JLabel();
         jTextFieldPageCount = BasicComponentFactory.createIntegerField(adapter.getBufferedModel("pagecount"));
+        jLabelCoverType = new javax.swing.JLabel();
+        jComboBoxCoverType = new javax.swing.JComboBox();
+        jLabelState = new javax.swing.JLabel();
+        jComboBoxState = new javax.swing.JComboBox();
 
         setLayout(new java.awt.GridBagLayout());
 
@@ -143,7 +166,7 @@ public final class ComicTopComponent extends TopComponent implements PropertyCha
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 6;
-        gridBagConstraints.gridy = 9;
+        gridBagConstraints.gridy = 11;
         gridBagConstraints.insets = new java.awt.Insets(0, 0, 4, 4);
         add(jButtonAccept, gridBagConstraints);
 
@@ -157,38 +180,39 @@ public final class ComicTopComponent extends TopComponent implements PropertyCha
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 7;
-        gridBagConstraints.gridy = 9;
+        gridBagConstraints.gridy = 11;
         gridBagConstraints.insets = new java.awt.Insets(0, 0, 4, 4);
         add(jButtonCancel, gridBagConstraints);
 
         org.openide.awt.Mnemonics.setLocalizedText(jLabelNr, java.util.ResourceBundle.getBundle("de/comicdb/comicdbcore/bean/Bundle").getString("LBL_COMIC_NR"));
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 2;
+        gridBagConstraints.gridy = 1;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
         gridBagConstraints.insets = new java.awt.Insets(0, 4, 4, 0);
         add(jLabelNr, gridBagConstraints);
 
-        org.openide.awt.Mnemonics.setLocalizedText(jLabelCoverType, java.util.ResourceBundle.getBundle("de/comicdb/comicdbcore/bean/Bundle").getString("LBL_COMIC_TYPE"));
+        org.openide.awt.Mnemonics.setLocalizedText(jLabelComicType, java.util.ResourceBundle.getBundle("de/comicdb/comicdbcore/bean/Bundle").getString("LBL_COMIC_TYPE"));
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 1;
+        gridBagConstraints.gridy = 4;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
         gridBagConstraints.insets = new java.awt.Insets(0, 4, 4, 0);
-        add(jLabelCoverType, gridBagConstraints);
+        add(jLabelComicType, gridBagConstraints);
 
+        jComboBoxComicType.setModel(new ComboBoxAdapter(comicTypes, adapter.getBufferedModel("comictype")));
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 1;
+        gridBagConstraints.gridy = 4;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.insets = new java.awt.Insets(0, 4, 4, 0);
-        add(jComboBoxCoverType, gridBagConstraints);
+        add(jComboBoxComicType, gridBagConstraints);
 
         org.openide.awt.Mnemonics.setLocalizedText(jLabelCoverPrice, java.util.ResourceBundle.getBundle("de/comicdb/comicdbcore/bean/Bundle").getString("LBL_COMIC_COVER_PRICE"));
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 3;
+        gridBagConstraints.gridy = 5;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
         gridBagConstraints.insets = new java.awt.Insets(0, 4, 4, 0);
         add(jLabelCoverPrice, gridBagConstraints);
@@ -196,7 +220,7 @@ public final class ComicTopComponent extends TopComponent implements PropertyCha
         jTextFieldCoverPrice.setColumns(10);
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 3;
+        gridBagConstraints.gridy = 5;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.insets = new java.awt.Insets(0, 4, 4, 0);
@@ -205,7 +229,7 @@ public final class ComicTopComponent extends TopComponent implements PropertyCha
         org.openide.awt.Mnemonics.setLocalizedText(jLabelPrice, java.util.ResourceBundle.getBundle("de/comicdb/comicdbcore/bean/Bundle").getString("LBL_COMIC_PRICE"));
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 4;
+        gridBagConstraints.gridy = 6;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
         gridBagConstraints.insets = new java.awt.Insets(0, 4, 4, 0);
         add(jLabelPrice, gridBagConstraints);
@@ -213,7 +237,7 @@ public final class ComicTopComponent extends TopComponent implements PropertyCha
         jTextFieldPrice.setColumns(10);
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 4;
+        gridBagConstraints.gridy = 6;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.insets = new java.awt.Insets(0, 4, 4, 0);
@@ -222,7 +246,7 @@ public final class ComicTopComponent extends TopComponent implements PropertyCha
         org.openide.awt.Mnemonics.setLocalizedText(jLabelCoverDate, java.util.ResourceBundle.getBundle("de/comicdb/comicdbcore/bean/Bundle").getString("LBL_COMIC_COVER_DATE"));
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 2;
-        gridBagConstraints.gridy = 3;
+        gridBagConstraints.gridy = 5;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
         gridBagConstraints.insets = new java.awt.Insets(0, 4, 4, 0);
         add(jLabelCoverDate, gridBagConstraints);
@@ -230,7 +254,7 @@ public final class ComicTopComponent extends TopComponent implements PropertyCha
         jTextFieldCoverDate.setColumns(10);
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 3;
-        gridBagConstraints.gridy = 3;
+        gridBagConstraints.gridy = 5;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.insets = new java.awt.Insets(0, 4, 4, 0);
@@ -239,7 +263,7 @@ public final class ComicTopComponent extends TopComponent implements PropertyCha
         org.openide.awt.Mnemonics.setLocalizedText(jLabelQuantity, java.util.ResourceBundle.getBundle("de/comicdb/comicdbcore/bean/Bundle").getString("LBL_COMIC_QUANTITY"));
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 2;
-        gridBagConstraints.gridy = 2;
+        gridBagConstraints.gridy = 4;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
         gridBagConstraints.insets = new java.awt.Insets(0, 4, 4, 0);
         add(jLabelQuantity, gridBagConstraints);
@@ -257,7 +281,7 @@ public final class ComicTopComponent extends TopComponent implements PropertyCha
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 4;
-        gridBagConstraints.gridy = 3;
+        gridBagConstraints.gridy = 5;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
         gridBagConstraints.insets = new java.awt.Insets(0, 0, 4, 0);
         add(jButtonCoverDate, gridBagConstraints);
@@ -271,13 +295,13 @@ public final class ComicTopComponent extends TopComponent implements PropertyCha
         );
         jPanelImageLayout.setVerticalGroup(
             jPanelImageLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-            .add(0, 240, Short.MAX_VALUE)
+            .add(0, 277, Short.MAX_VALUE)
         );
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 5;
         gridBagConstraints.gridy = 0;
         gridBagConstraints.gridwidth = 3;
-        gridBagConstraints.gridheight = 7;
+        gridBagConstraints.gridheight = 9;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.insets = new java.awt.Insets(4, 4, 4, 4);
         add(jPanelImage, gridBagConstraints);
@@ -285,14 +309,14 @@ public final class ComicTopComponent extends TopComponent implements PropertyCha
         org.openide.awt.Mnemonics.setLocalizedText(jLabelCost, java.util.ResourceBundle.getBundle("de/comicdb/comicdbcore/bean/Bundle").getString("LBL_COMIC_COST"));
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 5;
+        gridBagConstraints.gridy = 7;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
         gridBagConstraints.insets = new java.awt.Insets(0, 4, 4, 0);
         add(jLabelCost, gridBagConstraints);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 5;
+        gridBagConstraints.gridy = 7;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.insets = new java.awt.Insets(0, 4, 4, 0);
@@ -301,14 +325,14 @@ public final class ComicTopComponent extends TopComponent implements PropertyCha
         org.openide.awt.Mnemonics.setLocalizedText(jLabelPayDate, java.util.ResourceBundle.getBundle("de/comicdb/comicdbcore/bean/Bundle").getString("LBL_COMIC_PAYDATE"));
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 2;
-        gridBagConstraints.gridy = 4;
+        gridBagConstraints.gridy = 6;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
         gridBagConstraints.insets = new java.awt.Insets(0, 4, 4, 0);
         add(jLabelPayDate, gridBagConstraints);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 3;
-        gridBagConstraints.gridy = 4;
+        gridBagConstraints.gridy = 6;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.insets = new java.awt.Insets(0, 4, 4, 0);
@@ -321,7 +345,7 @@ public final class ComicTopComponent extends TopComponent implements PropertyCha
         jButtonPayDate.setPreferredSize(new java.awt.Dimension(18, 18));
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 4;
-        gridBagConstraints.gridy = 4;
+        gridBagConstraints.gridy = 6;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
         gridBagConstraints.insets = new java.awt.Insets(0, 0, 4, 0);
         add(jButtonPayDate, gridBagConstraints);
@@ -329,7 +353,7 @@ public final class ComicTopComponent extends TopComponent implements PropertyCha
         org.openide.awt.Mnemonics.setLocalizedText(jLabelModified, java.util.ResourceBundle.getBundle("de/comicdb/comicdbcore/bean/Bundle").getString("LBL_MODIFIED"));
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 9;
+        gridBagConstraints.gridy = 11;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
         gridBagConstraints.insets = new java.awt.Insets(0, 4, 4, 0);
         add(jLabelModified, gridBagConstraints);
@@ -337,7 +361,7 @@ public final class ComicTopComponent extends TopComponent implements PropertyCha
         jTextFieldModified.setEditable(false);
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 9;
+        gridBagConstraints.gridy = 11;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.insets = new java.awt.Insets(0, 4, 4, 0);
@@ -351,11 +375,11 @@ public final class ComicTopComponent extends TopComponent implements PropertyCha
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-            .add(0, 45, Short.MAX_VALUE)
+            .add(0, 26, Short.MAX_VALUE)
         );
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 8;
+        gridBagConstraints.gridy = 10;
         gridBagConstraints.gridwidth = 8;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.weightx = 1.0;
@@ -372,7 +396,7 @@ public final class ComicTopComponent extends TopComponent implements PropertyCha
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 5;
-        gridBagConstraints.gridy = 7;
+        gridBagConstraints.gridy = 9;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHEAST;
         gridBagConstraints.insets = new java.awt.Insets(4, 4, 0, 4);
         add(jButtonChooseImage, gridBagConstraints);
@@ -380,7 +404,7 @@ public final class ComicTopComponent extends TopComponent implements PropertyCha
         org.openide.awt.Mnemonics.setLocalizedText(jLabelCondition, java.util.ResourceBundle.getBundle("de/comicdb/comicdbcore/bean/Bundle").getString("LBL_COMIC_CONDITION"));
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 2;
-        gridBagConstraints.gridy = 1;
+        gridBagConstraints.gridy = 3;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
         gridBagConstraints.insets = new java.awt.Insets(0, 4, 4, 0);
         add(jLabelCondition, gridBagConstraints);
@@ -396,7 +420,7 @@ public final class ComicTopComponent extends TopComponent implements PropertyCha
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 7;
+        gridBagConstraints.gridy = 9;
         gridBagConstraints.gridwidth = 5;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.weightx = 1.0;
@@ -432,7 +456,7 @@ public final class ComicTopComponent extends TopComponent implements PropertyCha
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 6;
+        gridBagConstraints.gridy = 8;
         gridBagConstraints.gridwidth = 5;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.weightx = 1.0;
@@ -442,7 +466,7 @@ public final class ComicTopComponent extends TopComponent implements PropertyCha
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 2;
+        gridBagConstraints.gridy = 1;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.insets = new java.awt.Insets(0, 4, 4, 0);
@@ -451,7 +475,7 @@ public final class ComicTopComponent extends TopComponent implements PropertyCha
         jTextFieldCondition.setColumns(4);
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 3;
-        gridBagConstraints.gridy = 1;
+        gridBagConstraints.gridy = 3;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
         gridBagConstraints.insets = new java.awt.Insets(0, 4, 4, 0);
@@ -459,7 +483,7 @@ public final class ComicTopComponent extends TopComponent implements PropertyCha
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 3;
-        gridBagConstraints.gridy = 2;
+        gridBagConstraints.gridy = 4;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.insets = new java.awt.Insets(0, 4, 4, 0);
         add(jTextFieldQuantity, gridBagConstraints);
@@ -467,17 +491,51 @@ public final class ComicTopComponent extends TopComponent implements PropertyCha
         org.openide.awt.Mnemonics.setLocalizedText(jLabelPageCount, java.util.ResourceBundle.getBundle("de/comicdb/comicdbcore/bean/Bundle").getString("LBL_COMIC_PAGECOUNT"));
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 2;
-        gridBagConstraints.gridy = 5;
+        gridBagConstraints.gridy = 7;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
         gridBagConstraints.insets = new java.awt.Insets(0, 4, 4, 0);
         add(jLabelPageCount, gridBagConstraints);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 3;
-        gridBagConstraints.gridy = 5;
+        gridBagConstraints.gridy = 7;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.insets = new java.awt.Insets(0, 4, 4, 0);
         add(jTextFieldPageCount, gridBagConstraints);
+
+        org.openide.awt.Mnemonics.setLocalizedText(jLabelCoverType, java.util.ResourceBundle.getBundle("de/comicdb/comicdbcore/bean/Bundle").getString("LBL_COMIC_COVERTYPE"));
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 3;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
+        gridBagConstraints.insets = new java.awt.Insets(0, 4, 4, 0);
+        add(jLabelCoverType, gridBagConstraints);
+
+        jComboBoxCoverType.setModel(new ComboBoxAdapter(coverTypes, adapter.getBufferedModel("covertype")));
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 3;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.insets = new java.awt.Insets(0, 4, 4, 0);
+        add(jComboBoxCoverType, gridBagConstraints);
+
+        org.openide.awt.Mnemonics.setLocalizedText(jLabelState, java.util.ResourceBundle.getBundle("de/comicdb/comicdbcore/bean/Bundle").getString("LBL_COMIC_STATE"));
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 2;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
+        gridBagConstraints.insets = new java.awt.Insets(0, 4, 4, 0);
+        add(jLabelState, gridBagConstraints);
+
+        jComboBoxState.setModel(new ComboBoxAdapter(State.getStates(), adapter.getBufferedModel("state")));
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 2;
+        gridBagConstraints.gridwidth = 4;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.insets = new java.awt.Insets(0, 4, 4, 0);
+        add(jComboBoxState, gridBagConstraints);
 
     }// </editor-fold>//GEN-END:initComponents
 
@@ -559,7 +617,10 @@ public final class ComicTopComponent extends TopComponent implements PropertyCha
     private javax.swing.JButton jButtonChooseImage;
     private javax.swing.JButton jButtonCoverDate;
     private javax.swing.JButton jButtonPayDate;
+    private javax.swing.JComboBox jComboBoxComicType;
     private javax.swing.JComboBox jComboBoxCoverType;
+    private javax.swing.JComboBox jComboBoxState;
+    private javax.swing.JLabel jLabelComicType;
     private javax.swing.JLabel jLabelCondition;
     private javax.swing.JLabel jLabelCost;
     private javax.swing.JLabel jLabelCoverDate;
@@ -572,6 +633,7 @@ public final class ComicTopComponent extends TopComponent implements PropertyCha
     private javax.swing.JLabel jLabelPayDate;
     private javax.swing.JLabel jLabelPrice;
     private javax.swing.JLabel jLabelQuantity;
+    private javax.swing.JLabel jLabelState;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanelImage;
     private javax.swing.JPanel jPanelNotes;
