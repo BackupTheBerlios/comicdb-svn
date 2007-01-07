@@ -88,7 +88,12 @@ public final class ComicTopComponent extends TopComponent implements PropertyCha
     
     private void initCoverTypes() {
         coverTypes.add(NbBundle.getMessage(ComicTopComponent.class, "LBL_COMIC_COVERTYPE_VARIANT"));
+        coverTypes.add(NbBundle.getMessage(ComicTopComponent.class, "LBL_COMIC_COVERTYPE_HARD"));
+        coverTypes.add(NbBundle.getMessage(ComicTopComponent.class, "LBL_COMIC_COVERTYPE_SOFT"));
+        coverTypes.add(NbBundle.getMessage(ComicTopComponent.class, "LBL_COMIC_COVERTYPE_MUSEUM"));
+        coverTypes.add(NbBundle.getMessage(ComicTopComponent.class, "LBL_COMIC_COVERTYPE_SILVER"));
     }
+    
     /** This method is called from within the constructor to
      * initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is
@@ -101,8 +106,6 @@ public final class ComicTopComponent extends TopComponent implements PropertyCha
         popupMenu = new javax.swing.JPopupMenu();
         jLabelName = new javax.swing.JLabel();
         jTextFieldName = BasicComponentFactory.createTextField(adapter.getBufferedModel("name"));
-        jButtonAccept = new javax.swing.JButton();
-        jButtonCancel = new javax.swing.JButton();
         jLabelNr = new javax.swing.JLabel();
         jLabelComicType = new javax.swing.JLabel();
         jComboBoxComicType = new javax.swing.JComboBox();
@@ -114,7 +117,6 @@ public final class ComicTopComponent extends TopComponent implements PropertyCha
         jTextFieldCoverDate = BasicComponentFactory.createFormattedTextField(adapter.getBufferedModel("coverdate"), new SimpleDateFormat(java.util.ResourceBundle.getBundle("de/comicdb/comicdbcore/bean/Bundle").getString("format.date")));
         jLabelQuantity = new javax.swing.JLabel();
         jButtonCoverDate = new javax.swing.JButton();
-        jPanelImage = new ImagePanel();
         jLabelCost = new javax.swing.JLabel();
         jTextFieldCost = BasicComponentFactory.createFormattedTextField(adapter.getBufferedModel("cost"), new DecimalFormat("##0.00"));
         jLabelPayDate = new javax.swing.JLabel();
@@ -140,6 +142,11 @@ public final class ComicTopComponent extends TopComponent implements PropertyCha
         jComboBoxCoverType = new javax.swing.JComboBox();
         jLabelState = new javax.swing.JLabel();
         jComboBoxState = new javax.swing.JComboBox();
+        jScrollPane2 = new javax.swing.JScrollPane();
+        jPanelImage = new ImagePanel();
+        jPanel1 = new javax.swing.JPanel();
+        jButtonAccept = new javax.swing.JButton();
+        jButtonCancel = new javax.swing.JButton();
 
         setLayout(new java.awt.GridBagLayout());
 
@@ -155,34 +162,6 @@ public final class ComicTopComponent extends TopComponent implements PropertyCha
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.insets = new java.awt.Insets(4, 4, 4, 0);
         add(jTextFieldName, gridBagConstraints);
-
-        org.openide.awt.Mnemonics.setLocalizedText(jButtonAccept, java.util.ResourceBundle.getBundle("de/comicdb/comicdbcore/bean/Bundle").getString("button.accept"));
-        jButtonAccept.setEnabled(false);
-        jButtonAccept.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButtonAcceptActionPerformed(evt);
-            }
-        });
-
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 6;
-        gridBagConstraints.gridy = 11;
-        gridBagConstraints.insets = new java.awt.Insets(0, 0, 4, 4);
-        add(jButtonAccept, gridBagConstraints);
-
-        org.openide.awt.Mnemonics.setLocalizedText(jButtonCancel, java.util.ResourceBundle.getBundle("de/comicdb/comicdbcore/bean/Bundle").getString("button.cancel"));
-        jButtonCancel.setEnabled(false);
-        jButtonCancel.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButtonCancelActionPerformed(evt);
-            }
-        });
-
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 7;
-        gridBagConstraints.gridy = 11;
-        gridBagConstraints.insets = new java.awt.Insets(0, 0, 4, 4);
-        add(jButtonCancel, gridBagConstraints);
 
         org.openide.awt.Mnemonics.setLocalizedText(jLabelNr, java.util.ResourceBundle.getBundle("de/comicdb/comicdbcore/bean/Bundle").getString("LBL_COMIC_NR"));
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -286,26 +265,6 @@ public final class ComicTopComponent extends TopComponent implements PropertyCha
         gridBagConstraints.insets = new java.awt.Insets(0, 0, 4, 0);
         add(jButtonCoverDate, gridBagConstraints);
 
-        jPanelImage.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
-        org.jdesktop.layout.GroupLayout jPanelImageLayout = new org.jdesktop.layout.GroupLayout(jPanelImage);
-        jPanelImage.setLayout(jPanelImageLayout);
-        jPanelImageLayout.setHorizontalGroup(
-            jPanelImageLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-            .add(0, 238, Short.MAX_VALUE)
-        );
-        jPanelImageLayout.setVerticalGroup(
-            jPanelImageLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-            .add(0, 277, Short.MAX_VALUE)
-        );
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 5;
-        gridBagConstraints.gridy = 0;
-        gridBagConstraints.gridwidth = 3;
-        gridBagConstraints.gridheight = 9;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
-        gridBagConstraints.insets = new java.awt.Insets(4, 4, 4, 4);
-        add(jPanelImage, gridBagConstraints);
-
         org.openide.awt.Mnemonics.setLocalizedText(jLabelCost, java.util.ResourceBundle.getBundle("de/comicdb/comicdbcore/bean/Bundle").getString("LBL_COMIC_COST"));
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
@@ -375,12 +334,12 @@ public final class ComicTopComponent extends TopComponent implements PropertyCha
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-            .add(0, 26, Short.MAX_VALUE)
+            .add(0, 24, Short.MAX_VALUE)
         );
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 10;
-        gridBagConstraints.gridwidth = 8;
+        gridBagConstraints.gridwidth = 7;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.weighty = 1.0;
@@ -397,8 +356,8 @@ public final class ComicTopComponent extends TopComponent implements PropertyCha
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 5;
         gridBagConstraints.gridy = 9;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHEAST;
-        gridBagConstraints.insets = new java.awt.Insets(4, 4, 0, 4);
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+        gridBagConstraints.insets = new java.awt.Insets(4, 0, 0, 4);
         add(jButtonChooseImage, gridBagConstraints);
 
         org.openide.awt.Mnemonics.setLocalizedText(jLabelCondition, java.util.ResourceBundle.getBundle("de/comicdb/comicdbcore/bean/Bundle").getString("LBL_COMIC_CONDITION"));
@@ -537,6 +496,55 @@ public final class ComicTopComponent extends TopComponent implements PropertyCha
         gridBagConstraints.insets = new java.awt.Insets(0, 4, 4, 0);
         add(jComboBoxState, gridBagConstraints);
 
+        jPanelImage.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+        org.jdesktop.layout.GroupLayout jPanelImageLayout = new org.jdesktop.layout.GroupLayout(jPanelImage);
+        jPanelImage.setLayout(jPanelImageLayout);
+        jPanelImageLayout.setHorizontalGroup(
+            jPanelImageLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+            .add(0, 353, Short.MAX_VALUE)
+        );
+        jPanelImageLayout.setVerticalGroup(
+            jPanelImageLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+            .add(0, 282, Short.MAX_VALUE)
+        );
+        jScrollPane2.setViewportView(jPanelImage);
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 5;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.gridwidth = 2;
+        gridBagConstraints.gridheight = 9;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.weighty = 1.0;
+        add(jScrollPane2, gridBagConstraints);
+
+        org.openide.awt.Mnemonics.setLocalizedText(jButtonAccept, java.util.ResourceBundle.getBundle("de/comicdb/comicdbcore/bean/Bundle").getString("button.accept"));
+        jButtonAccept.setEnabled(false);
+        jButtonAccept.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonAcceptActionPerformed(evt);
+            }
+        });
+
+        jPanel1.add(jButtonAccept);
+
+        org.openide.awt.Mnemonics.setLocalizedText(jButtonCancel, java.util.ResourceBundle.getBundle("de/comicdb/comicdbcore/bean/Bundle").getString("button.cancel"));
+        jButtonCancel.setEnabled(false);
+        jButtonCancel.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonCancelActionPerformed(evt);
+            }
+        });
+
+        jPanel1.add(jButtonCancel);
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 6;
+        gridBagConstraints.gridy = 11;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.EAST;
+        add(jPanel1, gridBagConstraints);
+
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButtonCoverDateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonCoverDateActionPerformed
@@ -634,11 +642,13 @@ public final class ComicTopComponent extends TopComponent implements PropertyCha
     private javax.swing.JLabel jLabelPrice;
     private javax.swing.JLabel jLabelQuantity;
     private javax.swing.JLabel jLabelState;
+    private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanelImage;
     private javax.swing.JPanel jPanelNotes;
     private javax.swing.JPanel jPanelStories;
     private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPaneNotes;
     private javax.swing.JTable jTableStorys;
     private javax.swing.JTextArea jTextAreaNotes;

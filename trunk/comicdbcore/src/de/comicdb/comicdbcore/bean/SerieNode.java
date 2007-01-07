@@ -19,12 +19,17 @@
 package de.comicdb.comicdbcore.bean;
 
 import de.comicdb.comicdbcore.util.CopyUtil;
+import de.comicdb.comicdbcore.util.ImageUtil;
 import java.awt.datatransfer.Transferable;
 import java.awt.dnd.DnDConstants;
 import java.awt.event.ActionEvent;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
+import java.io.File;
 import java.io.IOException;
+import java.text.DateFormat;
+import java.text.DecimalFormat;
+import java.text.SimpleDateFormat;
 import java.util.List;
 import java.util.ResourceBundle;
 import javax.swing.AbstractAction;
@@ -112,7 +117,58 @@ public class SerieNode extends AbstractNode implements PropertyChangeListener {
                     fireShortDescriptionChange(null, getShortDescription());
                 }
             }
-        } };
+        }, new NewType() {
+            public String getName() {
+                return bundle.getString("LBL_NewComics");
+            }
+            public HelpCtx getHelpCtx() {
+                return new HelpCtx("org.myorg.systemproperties");
+            }
+            public void create() throws IOException {
+                String title = bundle.getString("LBL_NewComic_dialog");
+                String msg = bundle.getString("MSG_NewComic_dialog");
+                
+                String name = serie.getName();
+                NotifyDescriptor.InputLine desc = new NotifyDescriptor.InputLine(msg, title);
+                desc.setInputText(name);
+                DialogDisplayer.getDefault().notify(desc);
+                name = desc.getInputText();
+                
+                if (name.length() == 0) return;
+                
+                title = bundle.getString("LBL_NewComicCount_dialog");
+                msg = bundle.getString("MSG_NewComicCount_dialog");
+                desc = new NotifyDescriptor.InputLine(msg, title);
+                desc.setInputText("1");
+                DialogDisplayer.getDefault().notify(desc);
+                int count = 0;
+                try {
+                    count = Integer.parseInt(desc.getInputText());
+                } catch(NumberFormatException nfe) {
+                    return;
+                }
+                
+                int nr = getChildren().getNodesCount();
+                for (int i = 1; i <= count; i++) {
+                    Comic comic = new Comic();
+                    comic.setName(name);
+                    comic.setNr(new Integer( nr +  i));
+                    ComicChildren children = (ComicChildren)getChildren();
+                    children.getSerie().getComics().add(comic);
+                    boolean added = children.add(new Node[]{
+                        new ComicNode(comic)
+                    });
+                    if (added) {
+                        ComicTopComponent.getDefault().setComic(comic);
+                    }
+                }
+                if (!ComicTopComponent.getDefault().isOpened())
+                    ComicTopComponent.getDefault().open();
+                ComicTopComponent.getDefault().requestActive();
+                fireShortDescriptionChange(null, getShortDescription());
+            }
+        }
+        };
     }
     
     public Action getPreferredAction() {
@@ -146,19 +202,51 @@ public class SerieNode extends AbstractNode implements PropertyChangeListener {
             serie.addPropertyChangeListener(this);
     }
     
+    public Serie getSerie() {
+        return serie;
+    }
+    
     public void propertyChange(PropertyChangeEvent event) {
         setDisplayName(serie.getName());
         fireShortDescriptionChange(null, getShortDescription());
     }
     
     public String getShortDescription() {
-        String ret = "<html>";
+        StringBuffer ret = new StringBuffer("<html><body");
+        ret.append("<TABLE width=\"100%\" cellspacing=\"1\" border=\"0\" cellpadding=\"0\" align=\"center\">");
+        ret.append("<TR>");
+        ret.append("<TD align=\"center\"><b>");
+        ret.append(getDisplayName());
+        ret.append("</b></TD>");
+        ret.append("<TD rowspan=\"3\">");
+        if (getSerie().getImage() != null) {
+            File img = new File(getSerie().getImage().getDescription());
+            if (!img.exists()) {
+                img = ImageUtil.createTempImage(getSerie().getImage(), img);
+            }
+            ret.append("<img src=\"file:");
+            ret.append(img.getAbsolutePath());
+            ret.append("\">");
+        } else {
+            ret.append("&nbsp;");
+        }
+        ret.append("</TD>");
+        ret.append("</TR>");
         
-        ret += "<b>" + getDisplayName() + "</b><br>";
+        ret.append("<TR><TD>&nbsp;</TD></TR>");
         
-        ret += NbBundle.getMessage(PublisherNode.class, "LBL_Comic") + " " + serie.getComics().size();
-        return ret;
+        ret.append("<TR><TD valign=\"top\">");
+        ret.append(NbBundle.getMessage(PublisherNode.class, "LBL_Comic") + " " + serie.getComics().size());
+        ret.append("</TD></TR>");
+        
+        ret.append("<TR><TD>&nbsp;</TD></TR>");
+        
+        ret.append("</TABLE>");
+        
+        ret.append("</body></html>");
+        return ret.toString();
     }
+
     
     protected void createPasteTypes(Transferable t, List s) {
         super.createPasteTypes(t, s);
@@ -177,7 +265,7 @@ public class SerieNode extends AbstractNode implements PropertyChangeListener {
                 return new PasteType() {
                     public Transferable paste() throws IOException {
                         Comic comic_1 = null;
-                        if ( (action & DnDConstants.ACTION_COPY) != 0) { 
+                        if ( (action & DnDConstants.ACTION_COPY) != 0) {
                             comic_1 = CopyUtil.copyComic(comic);
                             comic_1.setName(comic.getName() + "_1");
                         } else {

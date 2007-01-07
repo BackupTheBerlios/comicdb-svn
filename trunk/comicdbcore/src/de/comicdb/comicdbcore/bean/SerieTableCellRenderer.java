@@ -35,7 +35,7 @@ public class SerieTableCellRenderer extends JLabel implements TableCellRenderer{
             Object value, boolean isSelected, boolean hasFocus,
             int row, int column) {
         
-        
+        table.setRowHeight(row, 140);
 //        if(isSelected) {
 //            setBackground(UIManager.getColor("Table.selectionBackground"));
 //        } else {
@@ -59,15 +59,14 @@ public class SerieTableCellRenderer extends JLabel implements TableCellRenderer{
             
         } else if (value instanceof ImageIcon) {
             ImageIcon icon = (ImageIcon) value;
-            setIcon(icon);
-            if(getPreferredSize().height != table.getRowHeight(row)) {
-                table.setRowHeight(row, getPreferredSize().height);
-            }
             setText(null);
             int columnWidth = table.getColumnModel().getColumn(column).getWidth();
             if (icon.getIconWidth() > columnWidth ) {
                 double scale = (double)((icon.getIconWidth() - columnWidth) / 3) / 100;
                 setIcon(getScaledImage(icon, scale));
+            }
+            if(getPreferredSize().height != table.getRowHeight(row)) {
+                table.setRowHeight(row, getPreferredSize().height);
             }
         } else {
             setIcon(null);

@@ -10,6 +10,7 @@
 package de.comicdb.comicdbcore.bean;
 
 import java.awt.Component;
+import java.awt.Dimension;
 import java.awt.Image;
 import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
@@ -35,6 +36,7 @@ public class ComicTableCellRenderer extends JLabel implements TableCellRenderer{
             Object value, boolean isSelected, boolean hasFocus,
             int row, int column) {
         
+        table.setRowHeight(row, 140);
         
 //        if(isSelected) {
 //            setBackground(UIManager.getColor("Table.selectionBackground"));
@@ -61,15 +63,14 @@ public class ComicTableCellRenderer extends JLabel implements TableCellRenderer{
         } else if (value instanceof Comic) {
             Comic comic = (Comic)value;
             if (comic.getImage() != null) {
-                setIcon(comic.getImage());
-                if(getPreferredSize().height != table.getRowHeight(row)) {
-                    table.setRowHeight(row, getPreferredSize().height);
-                }
                 setText(null);
                 int columnWidth = table.getColumnModel().getColumn(column).getWidth();
                 if (comic.getImage().getIconWidth() > columnWidth ) {
-                    double scale = (double)((comic.getImage().getIconWidth() - columnWidth) / 3) / 100;
+                    double scale = (double)((comic.getImage().getIconWidth() - columnWidth) / 4) / 100;
                     setIcon(getScaledImage(comic.getImage(), scale));
+                }
+                if(getPreferredSize().height != table.getRowHeight(row)) {
+                    table.setRowHeight(row, getPreferredSize().height);
                 }
                 
             } else {

@@ -9,6 +9,7 @@
 
 package de.comicdb.comicdbcore.bean;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import org.openide.util.NbBundle;
@@ -17,16 +18,25 @@ import org.openide.util.NbBundle;
  *
  * @author dm
  */
-public class State {
+
+public class State implements Serializable {
     
-    public final static State STATE_SEARCH = new State("STATE_SEARCH");
-    public final static State STATE_NECESSARY = new State("STATE_NECESSARY");
-    public final static State STATE_ORDER = new State("STATE_ORDER");
-    public final static State STATE_MY_OWN = new State("STATE_MY_OWN");
+    public final static State STATE_SEARCH = new State(new Integer(0),"STATE_SEARCH");
+    public final static State STATE_NECESSARY = new State(new Integer(1),"STATE_NECESSARY");
+    public static final State STATE_ORDER = new State(new Integer(2),"STATE_ORDER");
+    public final static State STATE_MY_OWN = new State(new Integer(3),"STATE_MY_OWN");
     
     private String bundleName = null;
+    private Integer index = null;
+    private static final long serialVersionUID = 344L;
     /** Creates a new instance of State */
-    public State(String bundleName) {
+    public State() {
+        
+    }
+    
+    public State(Integer index,String bundleName) {
+        super();
+        setIndex(index);
         setBundleName(bundleName);
     }
 
@@ -36,10 +46,6 @@ public class State {
 
     public void setBundleName(String bundleName) {
         this.bundleName = bundleName;
-    }
-    
-    public String toString() {
-        return NbBundle.getMessage(State.class, getBundleName());
     }
     
     public static List getStates() {
@@ -52,5 +58,30 @@ public class State {
                 
         return ret;
     }
+
+    public Integer getIndex() {
+        return index;
+    }
+
+    public void setIndex(Integer index) {
+        this.index = index;
+    }
+
+    public String toString() {
+        return NbBundle.getMessage(State.class, getBundleName());
+    }
+
+    public boolean equals(Object obj) {
+        if (!(obj instanceof State))
+            return false;
+        
+        State st = (State)obj;
+        if (getIndex() == null || st.getIndex() == null )
+            return false;
+        
+        return getIndex().intValue() == st.getIndex().intValue();
+    }
+    
+    
     
 }

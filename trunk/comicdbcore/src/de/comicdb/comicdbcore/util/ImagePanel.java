@@ -2,30 +2,27 @@
  * ComicDB - overview you comics
  * Copyright (C) 2006  Daniel Moos
  *
- * This program is free software; you can redistribute it and/or modify it under 
- * the terms of the GNU General Public License as published by the Free Software 
- * Foundation; either version 2 of the License, or (at your option) any later 
+ * This program is free software; you can redistribute it and/or modify it under
+ * the terms of the GNU General Public License as published by the Free Software
+ * Foundation; either version 2 of the License, or (at your option) any later
  * version.
  *
- * This program is distributed in the hope that it will be useful, 
- * but WITHOUT ANY WARRANTY; without even the implied warranty of 
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
  * See the GNU General Public License for more details.
  *
- * You should have received a copy of the GNU General Public License along with 
- * this program; if not, write to the Free Software Foundation, Inc., 51 Franklin 
+ * You should have received a copy of the GNU General Public License along with
+ * this program; if not, write to the Free Software Foundation, Inc., 51 Franklin
  * St, Fifth Floor, Boston, MA 02110, USA
  */
 package de.comicdb.comicdbcore.util;
 
+import java.awt.Dimension;
 import java.awt.Graphics;
-import java.awt.event.MouseEvent;
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
-import java.io.File;
-import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
-import javax.swing.JFileChooser;
 
 /**
  *
@@ -44,7 +41,11 @@ public class ImagePanel extends javax.swing.JPanel {
     
     public void setImageIcon(ImageIcon icon) {
         this.icon = icon;
-        updateUI();
+        if (icon != null) {
+            setSize(new Dimension(icon.getIconWidth() + 1, icon.getIconHeight() + 1));
+            setPreferredSize(getSize());
+        }
+//        updateUI();
     }
     
     public ImageIcon getImageIcon() {

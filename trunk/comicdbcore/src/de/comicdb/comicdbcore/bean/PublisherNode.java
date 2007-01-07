@@ -19,11 +19,13 @@
 package de.comicdb.comicdbcore.bean;
 
 import de.comicdb.comicdbcore.util.CopyUtil;
+import de.comicdb.comicdbcore.util.ImageUtil;
 import java.awt.datatransfer.Transferable;
 import java.awt.dnd.DnDConstants;
 import java.awt.event.ActionEvent;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
+import java.io.File;
 import java.io.IOException;
 import java.util.List;
 import java.util.ResourceBundle;
@@ -127,7 +129,7 @@ public class PublisherNode extends AbstractNode implements PropertyChangeListene
     public boolean canDestroy() {
         return true;
     }
-     
+    
     public boolean canCopy() {
         return true;
     }
@@ -157,12 +159,39 @@ public class PublisherNode extends AbstractNode implements PropertyChangeListene
     }
     
     public String getShortDescription() {
-        String ret = "<html>";
+        StringBuffer ret = new StringBuffer("<html><body");
+        ret.append("<TABLE width=\"100%\" cellspacing=\"1\" border=\"0\" cellpadding=\"0\" align=\"center\">");
+        ret.append("<TR>");
+        ret.append("<TD align=\"center\"><b>");
+        ret.append(getDisplayName());
+        ret.append("</b></TD>");
+        ret.append("<TD rowspan=\"3\">");
+        if (getPublisher().getImage() != null) {
+            File img = new File(getPublisher().getImage().getDescription());
+            if (!img.exists()) {
+                img = ImageUtil.createTempImage(getPublisher().getImage(), img);
+            }
+            ret.append("<img src=\"file:");
+            ret.append(img.getAbsolutePath());
+            ret.append("\">");
+        } else {
+            ret.append("&nbsp;");
+        }
+        ret.append("</TD>");
+        ret.append("</TR>");
         
-        ret += "<b>" + getDisplayName() + "</b><br>";
+        ret.append("<TR><TD>&nbsp;</TD></TR>");
         
-        ret += NbBundle.getMessage(PublisherNode.class, "LBL_Serie") + " " + publisher.getSeries().size();
-        return ret;
+        ret.append("<TR><TD valign=\"top\">");
+        ret.append( NbBundle.getMessage(PublisherNode.class, "LBL_Serie") + " " + getPublisher().getSeries().size());
+        ret.append("</TD></TR>");
+        
+        ret.append("<TR><TD>&nbsp;</TD></TR>");
+        
+        ret.append("</TABLE>");
+        
+        ret.append("</body></html>");
+        return ret.toString();
     }
     
     protected void createPasteTypes(Transferable t, List s) {
@@ -173,7 +202,7 @@ public class PublisherNode extends AbstractNode implements PropertyChangeListene
     }
     
     public PasteType getDropType(Transferable t, final int action, int index) {
-        final Node dropNode = NodeTransfer.node( t, 
+        final Node dropNode = NodeTransfer.node( t,
                 DnDConstants.ACTION_COPY_OR_MOVE+NodeTransfer.CLIPBOARD_CUT );
         if( null != dropNode ) {
             final Serie serie = (Serie)dropNode.getLookup().lookup( Serie.class );
@@ -182,7 +211,7 @@ public class PublisherNode extends AbstractNode implements PropertyChangeListene
                 return new PasteType() {
                     public Transferable paste() throws IOException {
                         Serie serie_1 = null;
-                        if ( (action & DnDConstants.ACTION_COPY) != 0) { 
+                        if ( (action & DnDConstants.ACTION_COPY) != 0) {
                             serie_1 = CopyUtil.copySerie(serie);
                             serie_1.setName(serie.getName() + "_1");
                         } else {

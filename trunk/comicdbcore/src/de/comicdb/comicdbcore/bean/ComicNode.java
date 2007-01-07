@@ -18,9 +18,8 @@
  */
 package de.comicdb.comicdbcore.bean;
 
-import java.awt.Graphics2D;
+import de.comicdb.comicdbcore.util.ImageUtil;
 import java.awt.event.ActionEvent;
-import java.awt.image.BufferedImage;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.io.File;
@@ -29,10 +28,8 @@ import java.text.DateFormat;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.ResourceBundle;
-import javax.imageio.ImageIO;
 import javax.swing.AbstractAction;
 import javax.swing.Action;
-import javax.swing.ImageIcon;
 import org.openide.actions.CopyAction;
 import org.openide.actions.CutAction;
 import org.openide.actions.DeleteAction;
@@ -56,8 +53,10 @@ public class ComicNode extends AbstractNode implements PropertyChangeListener {
     public ComicNode(Comic comic) {
         super( Children.LEAF, Lookups.singleton(comic) );
 //        setDisplayName(comic.getName() + " " + comic.getNr().toString());
+        
         setIconBaseWithExtension("de/comicdb/comicdbcore/cdb_16x16.png");
         setComic(comic);
+        fireDisplayNameChange(null, getHtmlDisplayName());
     }
     
     public Action[] getActions(boolean popup) {
@@ -122,7 +121,7 @@ public class ComicNode extends AbstractNode implements PropertyChangeListener {
         if (getComic().getImage() != null) {
             File img = new File(getComic().getImage().getDescription());
             if (!img.exists()) {
-                img = createTempImage(getComic().getImage(), img);
+                img = ImageUtil.createTempImage(getComic().getImage(), img);
             }
             ret.append("<img src=\"file:");
             ret.append(img.getAbsolutePath());
@@ -138,7 +137,7 @@ public class ComicNode extends AbstractNode implements PropertyChangeListener {
         ret.append("<TR><TD>");
         ret.append(NbBundle.getMessage(ComicNode.class, "LBL_COMIC_STATE") + " " + getComic().getState());
         ret.append("</TD></TR>");
-
+        
         DecimalFormat def = new DecimalFormat("##0.00");
         ret.append("<TR><TD>");
         ret.append(NbBundle.getMessage(ComicNode.class, "LBL_COMIC_COVER_PRICE") + " " + def.format(getComic().getCoverprice().doubleValue()));
@@ -166,25 +165,8 @@ public class ComicNode extends AbstractNode implements PropertyChangeListener {
         return ret.toString();
     }
     
-    private File createTempImage(ImageIcon icon, File oldFile) {
-        File tmp = new File(System.getProperties().getProperty("java.io.tmpdir"));
-        File ret = new File(tmp, oldFile.getName());
-        ret.deleteOnExit();
-        if (ret.exists())
-            return ret;
-        BufferedImage bi = new BufferedImage(icon.getIconWidth(), icon.getIconHeight(), BufferedImage.TYPE_INT_RGB );
-        Graphics2D g2d = bi.createGraphics();
-        g2d.drawImage(icon.getImage(), 0, 0, null);
-        try {
-            ImageIO.write(bi, "png", ret);
-        } catch (IOException ioe) {
-            ioe.printStackTrace();
-        }
-        return ret;
-    }
-    
     public String getHtmlDisplayName() {
-
+        
         StringBuffer ret = new StringBuffer("<html>");
         ret.append(getHTMLName());
         ret.append("</html>");
@@ -196,13 +178,15 @@ public class ComicNode extends AbstractNode implements PropertyChangeListener {
         String name = comic.getName() + " " + comic.getNr().toString();
         StringBuffer ret = new StringBuffer();
         if (comic.getState() != null) {
-            if (comic.getState() == State.STATE_SEARCH) {
+            if (comic.getState().equals(State.STATE_SEARCH)) {
                 ret.append("<font color=\"#FFFF00\">" + name + "</font>");
-            } else if (comic.getState() == State.STATE_NECESSARY) {
+            } else if (comic.getState().equals(State.STATE_NECESSARY)) {
                 ret.append("<font color=\"#FF0000\">" + name + "</font>");
-            } else if (comic.getState() == State.STATE_ORDER) {
+            } else if (comic.getState().equals(State.STATE_ORDER)) {
                 ret.append("<font color=\"#0000FF\">" + name + "</font>");
-            } else if (comic.getState() == State.STATE_MY_OWN) {
+            } else if (comic.getState().equals(State.STATE_MY_OWN)) {
+                ret.append(name);
+            } else {
                 ret.append(name);
             }
         } else {

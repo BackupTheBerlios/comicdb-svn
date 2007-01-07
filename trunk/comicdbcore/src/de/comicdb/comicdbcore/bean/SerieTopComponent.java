@@ -77,7 +77,6 @@ public final class SerieTopComponent extends TopComponent implements PropertyCha
 
         jLabel1 = new javax.swing.JLabel();
         jTextFieldName = BasicComponentFactory.createTextField(adapter.getBufferedModel("name"));
-        jPanelImage = new ImagePanel();
         jButtonChooseImage = new javax.swing.JButton();
         jPanel2 = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
@@ -85,6 +84,9 @@ public final class SerieTopComponent extends TopComponent implements PropertyCha
         jTableComics.setDefaultRenderer(Object.class,new ComicTableCellRenderer());
         jLabelModified = new javax.swing.JLabel();
         jTextFieldModified = BasicComponentFactory.createFormattedTextField(adapter.getBufferedModel("modified"), new SimpleDateFormat(java.util.ResourceBundle.getBundle("de/comicdb/comicdbcore/bean/Bundle").getString("format.date")));
+        jScrollPane2 = new javax.swing.JScrollPane();
+        jPanelImage = new ImagePanel();
+        jPanel1 = new javax.swing.JPanel();
         jButtonAccept = new javax.swing.JButton();
         jButtonCancel = new javax.swing.JButton();
 
@@ -103,26 +105,6 @@ public final class SerieTopComponent extends TopComponent implements PropertyCha
         gridBagConstraints.insets = new java.awt.Insets(4, 0, 0, 4);
         add(jTextFieldName, gridBagConstraints);
 
-        jPanelImage.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
-        org.jdesktop.layout.GroupLayout jPanelImageLayout = new org.jdesktop.layout.GroupLayout(jPanelImage);
-        jPanelImage.setLayout(jPanelImageLayout);
-        jPanelImageLayout.setHorizontalGroup(
-            jPanelImageLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-            .add(0, 238, Short.MAX_VALUE)
-        );
-        jPanelImageLayout.setVerticalGroup(
-            jPanelImageLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-            .add(0, 126, Short.MAX_VALUE)
-        );
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 5;
-        gridBagConstraints.gridy = 0;
-        gridBagConstraints.gridwidth = 3;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
-        gridBagConstraints.weighty = 1.0;
-        gridBagConstraints.insets = new java.awt.Insets(4, 0, 0, 4);
-        add(jPanelImage, gridBagConstraints);
-
         org.openide.awt.Mnemonics.setLocalizedText(jButtonChooseImage, java.util.ResourceBundle.getBundle("de/comicdb/comicdbcore/bean/Bundle").getString("button.choose"));
         jButtonChooseImage.setEnabled(false);
         jButtonChooseImage.addActionListener(new java.awt.event.ActionListener() {
@@ -132,9 +114,9 @@ public final class SerieTopComponent extends TopComponent implements PropertyCha
         });
 
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 5;
+        gridBagConstraints.gridx = 2;
         gridBagConstraints.gridy = 1;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.EAST;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
         gridBagConstraints.insets = new java.awt.Insets(4, 0, 0, 4);
         add(jButtonChooseImage, gridBagConstraints);
 
@@ -153,7 +135,7 @@ public final class SerieTopComponent extends TopComponent implements PropertyCha
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 2;
-        gridBagConstraints.gridwidth = 8;
+        gridBagConstraints.gridwidth = 3;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.weighty = 1.0;
@@ -177,6 +159,25 @@ public final class SerieTopComponent extends TopComponent implements PropertyCha
         gridBagConstraints.insets = new java.awt.Insets(0, 4, 4, 0);
         add(jTextFieldModified, gridBagConstraints);
 
+        jPanelImage.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+        org.jdesktop.layout.GroupLayout jPanelImageLayout = new org.jdesktop.layout.GroupLayout(jPanelImage);
+        jPanelImage.setLayout(jPanelImageLayout);
+        jPanelImageLayout.setHorizontalGroup(
+            jPanelImageLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+            .add(0, 282, Short.MAX_VALUE)
+        );
+        jPanelImageLayout.setVerticalGroup(
+            jPanelImageLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+            .add(0, 127, Short.MAX_VALUE)
+        );
+        jScrollPane2.setViewportView(jPanelImage);
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.weighty = 1.0;
+        add(jScrollPane2, gridBagConstraints);
+
         org.openide.awt.Mnemonics.setLocalizedText(jButtonAccept, java.util.ResourceBundle.getBundle("de/comicdb/comicdbcore/bean/Bundle").getString("button.accept"));
         jButtonAccept.setEnabled(false);
         jButtonAccept.addActionListener(new java.awt.event.ActionListener() {
@@ -185,11 +186,7 @@ public final class SerieTopComponent extends TopComponent implements PropertyCha
             }
         });
 
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 6;
-        gridBagConstraints.gridy = 3;
-        gridBagConstraints.insets = new java.awt.Insets(0, 0, 4, 4);
-        add(jButtonAccept, gridBagConstraints);
+        jPanel1.add(jButtonAccept);
 
         org.openide.awt.Mnemonics.setLocalizedText(jButtonCancel, java.util.ResourceBundle.getBundle("de/comicdb/comicdbcore/bean/Bundle").getString("button.cancel"));
         jButtonCancel.setEnabled(false);
@@ -199,11 +196,13 @@ public final class SerieTopComponent extends TopComponent implements PropertyCha
             }
         });
 
+        jPanel1.add(jButtonCancel);
+
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 7;
+        gridBagConstraints.gridx = 2;
         gridBagConstraints.gridy = 3;
-        gridBagConstraints.insets = new java.awt.Insets(0, 0, 4, 4);
-        add(jButtonCancel, gridBagConstraints);
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.EAST;
+        add(jPanel1, gridBagConstraints);
 
     }// </editor-fold>//GEN-END:initComponents
 
@@ -245,9 +244,11 @@ public final class SerieTopComponent extends TopComponent implements PropertyCha
     private javax.swing.JButton jButtonChooseImage;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabelModified;
+    private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanelImage;
     private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JTable jTableComics;
     private javax.swing.JFormattedTextField jTextFieldModified;
     private javax.swing.JTextField jTextFieldName;
