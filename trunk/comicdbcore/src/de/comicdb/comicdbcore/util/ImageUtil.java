@@ -27,19 +27,20 @@ public class ImageUtil {
     }
     
     public static File createTempImage(ImageIcon icon, File oldFile) {
-        File tmp = new File(System.getProperties().getProperty("java.io.tmpdir"));
-        File ret = new File(tmp, oldFile.getName());
-        ret.deleteOnExit();
-        if (ret.exists())
-            return ret;
-        BufferedImage bi = new BufferedImage(icon.getIconWidth(), icon.getIconHeight(), BufferedImage.TYPE_INT_RGB );
-        Graphics2D g2d = bi.createGraphics();
-        g2d.drawImage(icon.getImage(), 0, 0, null);
+        String extension = icon.getDescription();
+        extension = extension.substring(extension.lastIndexOf(".") + 1);
         try {
-            ImageIO.write(bi, "png", ret);
+            File ret = File.createTempFile("cdb", "." + extension);
+            ret.deleteOnExit();
+            BufferedImage bi = new BufferedImage(icon.getIconWidth(), icon.getIconHeight(), BufferedImage.TYPE_INT_RGB );
+            Graphics2D g2d = bi.createGraphics();
+            g2d.drawImage(icon.getImage(), 0, 0, null);
+            g2d.dispose(); //??
+            ImageIO.write(bi, extension, ret);
+            return ret;
         } catch (IOException ioe) {
             ioe.printStackTrace();
         }
-        return ret;
+        return null;
     }
 }
