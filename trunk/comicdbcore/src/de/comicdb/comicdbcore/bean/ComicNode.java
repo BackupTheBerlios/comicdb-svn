@@ -123,9 +123,11 @@ public class ComicNode extends AbstractNode implements PropertyChangeListener {
             if (!img.exists()) {
                 img = ImageUtil.createTempImage(getComic().getImage(), img);
             }
-            ret.append("<img src=\"file:");
-            ret.append(img.getAbsolutePath());
-            ret.append("\">");
+            if( img != null) {
+                ret.append("<img src=\"file:");
+                ret.append(img.getAbsolutePath());
+                ret.append("\">");
+            }
         } else {
             ret.append("&nbsp;");
         }

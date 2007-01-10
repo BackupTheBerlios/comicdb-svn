@@ -135,8 +135,8 @@ public class PublisherNode extends AbstractNode implements PropertyChangeListene
     }
     
     public void destroy() throws IOException {
-        PublisherChildren children = (PublisherChildren)getParentNode().getChildren();
-        children.getComicdb().getPublisher().remove(publisher);
+        ComicDBChildren children = (ComicDBChildren)getParentNode().getChildren();
+        children.getComicDB().getPublisher().remove(publisher);
         children.remove(new Node[] {this});
 //        children.addNotify();
     }
@@ -171,9 +171,11 @@ public class PublisherNode extends AbstractNode implements PropertyChangeListene
             if (!img.exists()) {
                 img = ImageUtil.createTempImage(getPublisher().getImage(), img);
             }
-            ret.append("<img src=\"file:");
-            ret.append(img.getAbsolutePath());
-            ret.append("\">");
+            if( img != null) {
+                ret.append("<img src=\"file:");
+                ret.append(img.getAbsolutePath());
+                ret.append("\">");
+            }
         } else {
             ret.append("&nbsp;");
         }

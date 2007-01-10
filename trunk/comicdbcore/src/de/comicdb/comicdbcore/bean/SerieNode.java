@@ -224,9 +224,11 @@ public class SerieNode extends AbstractNode implements PropertyChangeListener {
             if (!img.exists()) {
                 img = ImageUtil.createTempImage(getSerie().getImage(), img);
             }
-            ret.append("<img src=\"file:");
-            ret.append(img.getAbsolutePath());
-            ret.append("\">");
+            if( img != null) {
+                ret.append("<img src=\"file:");
+                ret.append(img.getAbsolutePath());
+                ret.append("\">");
+            }
         } else {
             ret.append("&nbsp;");
         }
@@ -246,7 +248,7 @@ public class SerieNode extends AbstractNode implements PropertyChangeListener {
         ret.append("</body></html>");
         return ret.toString();
     }
-
+    
     
     protected void createPasteTypes(Transferable t, List s) {
         super.createPasteTypes(t, s);
