@@ -18,6 +18,7 @@
  */
 package de.comicdb.comicdbcore.bean;
 
+import de.comicdb.comicdbcore.sort.SortAction;
 import de.comicdb.comicdbcore.util.CopyUtil;
 import de.comicdb.comicdbcore.util.ImageUtil;
 import java.awt.datatransfer.Transferable;
@@ -27,13 +28,12 @@ import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.io.File;
 import java.io.IOException;
-import java.text.DateFormat;
-import java.text.DecimalFormat;
-import java.text.SimpleDateFormat;
 import java.util.List;
 import java.util.ResourceBundle;
 import javax.swing.AbstractAction;
 import javax.swing.Action;
+import javax.swing.JMenu;
+import javax.swing.JMenuItem;
 import org.openide.DialogDisplayer;
 import org.openide.NotifyDescriptor;
 import org.openide.actions.CopyAction;
@@ -46,6 +46,7 @@ import org.openide.nodes.Node;
 import org.openide.nodes.NodeTransfer;
 import org.openide.util.HelpCtx;
 import org.openide.util.NbBundle;
+import org.openide.util.actions.NodeAction;
 import org.openide.util.actions.SystemAction;
 import org.openide.util.datatransfer.NewType;
 import org.openide.util.datatransfer.PasteType;
@@ -73,6 +74,8 @@ public class SerieNode extends AbstractNode implements PropertyChangeListener {
             getPreferredAction(),
             null,
             SystemAction.get( NewAction.class),
+            null,
+            SystemAction.get( SortAction.class),
             null,
             SystemAction.get( CopyAction.class ),
             SystemAction.get( CutAction.class ),
@@ -106,16 +109,17 @@ public class SerieNode extends AbstractNode implements PropertyChangeListener {
                 comic.setNr(new Integer(getChildren().getNodesCount() + 1));
                 ComicChildren children = (ComicChildren)getChildren();
                 children.getSerie().getComics().add(comic);
-                boolean added = children.add(new Node[]{
-                    new ComicNode(comic)
-                });
-                if (added) {
+//                boolean added = children.add(new Node[]{
+//                    new ComicNode(comic)
+//                });
+//                if (added) {
+                children.addNotify();
                     ComicTopComponent.getDefault().setComic(comic);
                     if (!ComicTopComponent.getDefault().isOpened())
                         ComicTopComponent.getDefault().open();
                     ComicTopComponent.getDefault().requestActive();
                     fireShortDescriptionChange(null, getShortDescription());
-                }
+//                }
             }
         }, new NewType() {
             public String getName() {
@@ -155,12 +159,13 @@ public class SerieNode extends AbstractNode implements PropertyChangeListener {
                     comic.setNr(new Integer( nr +  i));
                     ComicChildren children = (ComicChildren)getChildren();
                     children.getSerie().getComics().add(comic);
-                    boolean added = children.add(new Node[]{
-                        new ComicNode(comic)
-                    });
-                    if (added) {
+                    children.addNotify();
+//                    boolean added = children.add(new Node[]{
+//                        new ComicNode(comic)
+//                    });
+//                    if (added) {
                         ComicTopComponent.getDefault().setComic(comic);
-                    }
+//                    }
                 }
                 if (!ComicTopComponent.getDefault().isOpened())
                     ComicTopComponent.getDefault().open();
@@ -285,4 +290,5 @@ public class SerieNode extends AbstractNode implements PropertyChangeListener {
         }
         return null;
     }
+
 }

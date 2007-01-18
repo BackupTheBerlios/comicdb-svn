@@ -77,7 +77,6 @@ public final class SerieTopComponent extends TopComponent implements PropertyCha
 
         jLabel1 = new javax.swing.JLabel();
         jTextFieldName = BasicComponentFactory.createTextField(adapter.getBufferedModel("name"));
-        jButtonChooseImage = new javax.swing.JButton();
         jPanel2 = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
         jTableComics = new javax.swing.JTable();
@@ -89,6 +88,9 @@ public final class SerieTopComponent extends TopComponent implements PropertyCha
         jPanel1 = new javax.swing.JPanel();
         jButtonAccept = new javax.swing.JButton();
         jButtonCancel = new javax.swing.JButton();
+        jPanel3 = new javax.swing.JPanel();
+        jButtonChooseImage = new javax.swing.JButton();
+        jButtonDeleteImage = new javax.swing.JButton();
 
         setLayout(new java.awt.GridBagLayout());
 
@@ -104,21 +106,6 @@ public final class SerieTopComponent extends TopComponent implements PropertyCha
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.insets = new java.awt.Insets(4, 0, 0, 4);
         add(jTextFieldName, gridBagConstraints);
-
-        org.openide.awt.Mnemonics.setLocalizedText(jButtonChooseImage, java.util.ResourceBundle.getBundle("de/comicdb/comicdbcore/bean/Bundle").getString("button.choose"));
-        jButtonChooseImage.setEnabled(false);
-        jButtonChooseImage.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButtonChooseImageActionPerformed(evt);
-            }
-        });
-
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 2;
-        gridBagConstraints.gridy = 1;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
-        gridBagConstraints.insets = new java.awt.Insets(4, 0, 0, 4);
-        add(jButtonChooseImage, gridBagConstraints);
 
         jPanel2.setLayout(new java.awt.BorderLayout());
 
@@ -159,7 +146,6 @@ public final class SerieTopComponent extends TopComponent implements PropertyCha
         gridBagConstraints.insets = new java.awt.Insets(0, 4, 4, 0);
         add(jTextFieldModified, gridBagConstraints);
 
-        jPanelImage.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
         org.jdesktop.layout.GroupLayout jPanelImageLayout = new org.jdesktop.layout.GroupLayout(jPanelImage);
         jPanelImage.setLayout(jPanelImageLayout);
         jPanelImageLayout.setHorizontalGroup(
@@ -174,8 +160,8 @@ public final class SerieTopComponent extends TopComponent implements PropertyCha
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
-        gridBagConstraints.weightx = 1.0;
         gridBagConstraints.weighty = 1.0;
+        gridBagConstraints.insets = new java.awt.Insets(4, 0, 0, 4);
         add(jScrollPane2, gridBagConstraints);
 
         org.openide.awt.Mnemonics.setLocalizedText(jButtonAccept, java.util.ResourceBundle.getBundle("de/comicdb/comicdbcore/bean/Bundle").getString("button.accept"));
@@ -204,22 +190,45 @@ public final class SerieTopComponent extends TopComponent implements PropertyCha
         gridBagConstraints.anchor = java.awt.GridBagConstraints.EAST;
         add(jPanel1, gridBagConstraints);
 
+        org.openide.awt.Mnemonics.setLocalizedText(jButtonChooseImage, java.util.ResourceBundle.getBundle("de/comicdb/comicdbcore/bean/Bundle").getString("button.choose"));
+        jButtonChooseImage.setEnabled(false);
+        jButtonChooseImage.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonChooseImageActionPerformed(evt);
+            }
+        });
+
+        jPanel3.add(jButtonChooseImage);
+
+        org.openide.awt.Mnemonics.setLocalizedText(jButtonDeleteImage, java.util.ResourceBundle.getBundle("de/comicdb/comicdbcore/Bundle").getString("BTN_DELETE"));
+        jButtonDeleteImage.setEnabled(false);
+        jButtonDeleteImage.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonDeleteImageActionPerformed(evt);
+            }
+        });
+
+        jPanel3.add(jButtonDeleteImage);
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 2;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+        gridBagConstraints.insets = new java.awt.Insets(4, 0, 0, 4);
+        add(jPanel3, gridBagConstraints);
+
     }// </editor-fold>//GEN-END:initComponents
 
-    private void jButtonCancelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonCancelActionPerformed
-        trigger.triggerFlush();
-    }//GEN-LAST:event_jButtonCancelActionPerformed
-
-    private void jButtonAcceptActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonAcceptActionPerformed
-        serie.setImage(((ImagePanel)jPanelImage).getImageIcon());
-        serie.setModified(new Date());
-        trigger.triggerCommit();
-    }//GEN-LAST:event_jButtonAcceptActionPerformed
+    private void jButtonDeleteImageActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonDeleteImageActionPerformed
+        ((ImagePanel)jPanelImage).setImageIcon(null);
+        adapter.setBufferedValue("image",null);
+    }//GEN-LAST:event_jButtonDeleteImageActionPerformed
 
     private void jButtonChooseImageActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonChooseImageActionPerformed
         ComicDBOptionUtil util = new ComicDBOptionUtil();
         ComicDBOption options = util.retrieveSetting();
-
+        
         JFileChooser chooser = new JFileChooser(options.getImagePath());
         chooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
         
@@ -230,22 +239,34 @@ public final class SerieTopComponent extends TopComponent implements PropertyCha
         
         options.setImagePath(chooser.getSelectedFile().getParent());
         util.storeSetting(options);
-
+        
         ((ImagePanel)jPanelImage).setImageIcon(new ImageIcon(chooser.getSelectedFile().getAbsolutePath()));
+        
         adapter.setBufferedValue("image", new ImageIcon(chooser.getSelectedFile().getAbsolutePath()));
-
-//        setSaveChooserPath(chooser.getSelectedFile().getParentFile());
     }//GEN-LAST:event_jButtonChooseImageActionPerformed
+
+    private void jButtonCancelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonCancelActionPerformed
+        ((ImagePanel)jPanelImage).setImageIcon(serie.getImage());
+        trigger.triggerFlush();
+    }//GEN-LAST:event_jButtonCancelActionPerformed
+
+    private void jButtonAcceptActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonAcceptActionPerformed
+        serie.setImage(((ImagePanel)jPanelImage).getImageIcon());
+        serie.setModified(new Date());
+        trigger.triggerCommit();
+    }//GEN-LAST:event_jButtonAcceptActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButtonAccept;
     private javax.swing.JButton jButtonCancel;
     private javax.swing.JButton jButtonChooseImage;
+    private javax.swing.JButton jButtonDeleteImage;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabelModified;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
+    private javax.swing.JPanel jPanel3;
     private javax.swing.JPanel jPanelImage;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
@@ -318,6 +339,7 @@ public final class SerieTopComponent extends TopComponent implements PropertyCha
         ((ImagePanel)jPanelImage).setImageIcon(serie.getImage());
         setName(NbBundle.getMessage(SerieTopComponent.class, "CTL_SerieTopComponent") + ":" + serie.getName());
         jButtonChooseImage.setEnabled(serie != null);
+        jButtonDeleteImage.setEnabled(serie != null);
     }
 
     public void propertyChange(PropertyChangeEvent propertyChangeEvent) {

@@ -1,16 +1,26 @@
-/*
- * SerieTableCellRenderer.java
+/**
+ * ComicDB - overview you comics
+ * Copyright (C) 2006  Daniel Moos
  *
- * Created on 2. Januar 2007, 15:49
+ * This program is free software; you can redistribute it and/or modify it under 
+ * the terms of the GNU General Public License as published by the Free Software 
+ * Foundation; either version 2 of the License, or (at your option) any later 
+ * version.
  *
- * To change this template, choose Tools | Template Manager
- * and open the template in the editor.
+ * This program is distributed in the hope that it will be useful, 
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of 
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. 
+ * See the GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License along with 
+ * this program; if not, write to the Free Software Foundation, Inc., 51 Franklin 
+ * St, Fifth Floor, Boston, MA 02110, USA
  */
 
 package de.comicdb.comicdbcore.bean;
 
+import de.comicdb.comicdbcore.util.ImageUtil;
 import java.awt.Component;
-import java.awt.Image;
 import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
@@ -60,14 +70,21 @@ public class SerieTableCellRenderer extends JLabel implements TableCellRenderer{
         } else if (value instanceof ImageIcon) {
             ImageIcon icon = (ImageIcon) value;
             setText(null);
-            int columnWidth = table.getColumnModel().getColumn(column).getWidth();
-            if (icon.getIconWidth() > columnWidth ) {
-                double scale = (double)((icon.getIconWidth() - columnWidth) / 3) / 100;
-                setIcon(getScaledImage(icon, scale));
+            int thumbWidth = 160;
+            int thumbHeight = 120;
+            double thumbRatio = (double)thumbWidth / (double)thumbHeight;
+            int imageWidth = icon.getImage().getWidth(null);
+            int imageHeight = icon.getImage().getHeight(null);
+            double imageRatio = (double)imageWidth / (double)imageHeight;
+            if (thumbRatio < imageRatio) {
+                thumbHeight = (int)(thumbWidth / imageRatio);
+            } else {
+                thumbWidth = (int)(thumbHeight * imageRatio);
             }
-            if(getPreferredSize().height != table.getRowHeight(row)) {
-                table.setRowHeight(row, getPreferredSize().height);
-            }
+            setIcon(ImageUtil.getThumbImage(icon, thumbHeight, thumbWidth));
+//            if(getPreferredSize().height > table.getRowHeight(row)) {
+//                table.setRowHeight(row, getPreferredSize().height);
+//            }
         } else {
             setIcon(null);
             setText((String)value);
@@ -75,13 +92,4 @@ public class SerieTableCellRenderer extends JLabel implements TableCellRenderer{
         
         return this;
     }
-    
-    public ImageIcon getScaledImage(ImageIcon myLoadedImageIcon, double scaleFactor) {
-        Image myImage = myLoadedImageIcon.getImage();
-        int scaledX = (int) (scaleFactor * myImage.getWidth(null));
-        int scaledY = (int) (scaleFactor * myImage.getHeight(null));
-        Image scaledImage  = myImage.getScaledInstance(scaledX , scaledY, Image.SCALE_SMOOTH);
-        return new ImageIcon(scaledImage);
-    }
-    
 }

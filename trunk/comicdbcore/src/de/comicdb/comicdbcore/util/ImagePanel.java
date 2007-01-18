@@ -46,6 +46,7 @@ public class ImagePanel extends javax.swing.JPanel {
             setPreferredSize(getSize());
         }
 //        updateUI();
+        repaint();
     }
     
     public ImageIcon getImageIcon() {

@@ -18,6 +18,11 @@
  */
 package de.comicdb.comicdbcore.bean;
 
+import de.comicdb.comicdbcore.options.ComicDBOption;
+import de.comicdb.comicdbcore.options.ComicDBOptionUtil;
+import de.comicdb.comicdbcore.sort.Sort;
+import de.comicdb.comicdbcore.sort.Sortable;
+import de.comicdb.comicdbcore.sort.SortableItem;
 import java.io.Serializable;
 import org.openide.nodes.Children;
 import org.openide.nodes.Node;
@@ -26,7 +31,7 @@ import org.openide.nodes.Node;
  *
  * @author dm
  */
-public class ComicChildren extends Children.Keys implements Serializable{
+public class ComicChildren extends Children.Keys implements Serializable, Sortable{
     private Serie serie;
     /** Creates a new instance of ComicDBNode */
     public ComicChildren(Serie serie) {
@@ -40,9 +45,37 @@ public class ComicChildren extends Children.Keys implements Serializable{
     
     protected void addNotify() {
         super.addNotify();
-        setKeys(serie.getComics());
+        updateChildren();
     }
-
+    
+    public void updateChildren() {
+        ComicDBOptionUtil util = new ComicDBOptionUtil();
+        ComicDBOption options = util.retrieveSetting();
+        // compatible to older versions
+        if (options.getComicSort() == null)
+            options.setComicSort(new Sort("nr", Sort.ASC));
+        
+        setKeys(serie.getComicSet(options.getComicSort()).toArray());
+    }
+    
+    public void setSort(Sort sort) {
+        ComicDBOptionUtil util = new ComicDBOptionUtil();
+        ComicDBOption options = util.retrieveSetting();
+        options.setComicSort(sort);
+        util.storeSetting(options);
+    }
+    
+    public SortableItem[] getSortableItems() {
+        ComicDBOptionUtil util = new ComicDBOptionUtil();
+        ComicDBOption options = util.retrieveSetting();
+        Sort sort = options.getComicSort();
+        System.out.println("getSortableItems " + sort.getProperty());
+        return new SortableItem[] {
+            new SortableItem("nr", "nr", sort.getProperty().equalsIgnoreCase("nr") ? sort.getOrder() : 0),
+            new SortableItem("displayName", "name", sort.getProperty().equalsIgnoreCase("displayName") ? sort.getOrder() : 0)
+        };
+    }
+    
     public Serie getSerie() {
         return serie;
     }

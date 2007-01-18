@@ -30,7 +30,7 @@ public class ComicDBOptionUtil {
     FileLock lock;
     ComicDBOption option = new ComicDBOption();
     
-    /** Creates a new instance of MailOption */
+    /** Creates a new instance of ComicDBOption */
     public ComicDBOptionUtil() {
         folderObject = Repository.getDefault().getDefaultFileSystem().getRoot().getFileObject("Settings");
         if (folderObject == null){

@@ -18,6 +18,7 @@
  */
 package de.comicdb.comicdbcore.bean;
 
+import de.comicdb.comicdbcore.sort.SortAction;
 import de.comicdb.comicdbcore.util.CopyUtil;
 import de.comicdb.comicdbcore.util.ImageUtil;
 import java.awt.datatransfer.Transferable;
@@ -71,6 +72,8 @@ public class PublisherNode extends AbstractNode implements PropertyChangeListene
             null,
             SystemAction.get( NewAction.class),
             null,
+            SystemAction.get( SortAction.class),
+            null,
             SystemAction.get( CopyAction.class ),
             SystemAction.get( CutAction.class ),
             SystemAction.get( PasteAction.class),
@@ -112,16 +115,17 @@ public class PublisherNode extends AbstractNode implements PropertyChangeListene
                 serie.setName(name);
                 SerieChildren children = (SerieChildren)getChildren();
                 children.getPublisher().getSeries().add(serie);
-                boolean added = children.add(new Node[]{
-                    new SerieNode(serie)
-                });
-                if (added) {
+                children.addNotify();
+//                boolean added = children.add(new Node[]{
+//                    new SerieNode(serie)
+//                });
+//                if (added) {
                     SerieTopComponent.getDefault().setSerie(serie);
                     if (!SerieTopComponent.getDefault().isOpened())
                         SerieTopComponent.getDefault().open();
                     SerieTopComponent.getDefault().requestActive();
                     fireShortDescriptionChange(null, getShortDescription());
-                }
+//                }
             }
         } };
     }

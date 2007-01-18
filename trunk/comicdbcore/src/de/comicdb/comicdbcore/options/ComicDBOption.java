@@ -9,6 +9,7 @@
 
 package de.comicdb.comicdbcore.options;
 
+import de.comicdb.comicdbcore.sort.Sort;
 import java.io.Serializable;
 
 /**
@@ -20,6 +21,10 @@ public class ComicDBOption implements Serializable{
     private String savePath = null;
     private String loadPath = null;
     private String imagePath = null;
+    
+    private Sort comicSort = new Sort("nr", Sort.ASC);
+    private Sort serieSort = new Sort("name", Sort.ASC);
+    private Sort publisherSort = new Sort("name", Sort.ASC);
     
     /** Creates a new instance of ComicDBOption */
     public ComicDBOption() {
@@ -47,6 +52,30 @@ public class ComicDBOption implements Serializable{
 
     public void setImagePath(String imagePath) {
         this.imagePath = imagePath;
+    }
+
+    public Sort getComicSort() {
+        return comicSort;
+    }
+
+    public void setComicSort(Sort comicSort) {
+        this.comicSort = comicSort;
+    }
+
+    public Sort getSerieSort() {
+        return serieSort;
+    }
+
+    public void setSerieSort(Sort serieSort) {
+        this.serieSort = serieSort;
+    }
+
+    public Sort getPublisherSort() {
+        return publisherSort;
+    }
+
+    public void setPublisherSort(Sort publisherSort) {
+        this.publisherSort = publisherSort;
     }
     
 }

@@ -18,6 +18,7 @@
  */
 package de.comicdb.comicdbcore.bean;
 
+import de.comicdb.comicdbcore.sort.SortAction;
 import de.comicdb.comicdbcore.util.CopyUtil;
 import java.awt.datatransfer.Transferable;
 import java.awt.dnd.DnDConstants;
@@ -57,6 +58,8 @@ public class ComicDBNode extends AbstractNode {
     public Action[] getActions(boolean popup) {
         return new Action[] {
             SystemAction.get( NewAction.class ),
+            null,
+            SystemAction.get( SortAction.class),
             null,
             SystemAction.get( PasteAction.class)
         };

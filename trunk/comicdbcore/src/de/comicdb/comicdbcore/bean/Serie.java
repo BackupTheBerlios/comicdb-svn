@@ -19,10 +19,14 @@
 package de.comicdb.comicdbcore.bean;
 
 import com.jgoodies.binding.beans.Model;
+import de.comicdb.comicdbcore.sort.Sort;
+import de.comicdb.comicdbcore.util.PropertyComparator;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.SortedSet;
+import java.util.TreeSet;
 import javax.swing.ImageIcon;
 
 /**
@@ -36,6 +40,8 @@ public class Serie extends Model implements Serializable {
     private Date modified = new Date();
     
     private List<Comic> comics = new ArrayList<Comic>();
+    
+    private static final long serialVersionUID = -6305804902243332896L;
     /** Creates a new instance of Serie */
     public Serie() {
     }
@@ -63,6 +69,12 @@ public class Serie extends Model implements Serializable {
     public List<Comic> getComics() {
         return comics;
     }
+    
+    public SortedSet<Comic> getComicSet(Sort sort) {
+        SortedSet<Comic> ret = new TreeSet<Comic>(new PropertyComparator(sort));
+        ret.addAll(getComics());
+        return ret;
+    }
 
     public void setComics(List<Comic> comics) {
         this.comics = comics;
@@ -75,5 +87,4 @@ public class Serie extends Model implements Serializable {
     public void setModified(Date modified) {
         this.modified = modified;
     }
-    
 }
