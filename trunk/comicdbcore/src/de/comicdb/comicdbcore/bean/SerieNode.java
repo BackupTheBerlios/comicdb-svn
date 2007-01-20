@@ -18,9 +18,12 @@
  */
 package de.comicdb.comicdbcore.bean;
 
+import de.comicdb.comicdbcore.ComicWizardAction;
 import de.comicdb.comicdbcore.sort.SortAction;
 import de.comicdb.comicdbcore.util.CopyUtil;
 import de.comicdb.comicdbcore.util.ImageUtil;
+import de.comicdb.comicdbcore.ComicWizardPanel;
+import java.awt.Dialog;
 import java.awt.datatransfer.Transferable;
 import java.awt.dnd.DnDConstants;
 import java.awt.event.ActionEvent;
@@ -28,14 +31,14 @@ import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.io.File;
 import java.io.IOException;
+import java.text.MessageFormat;
 import java.util.List;
 import java.util.ResourceBundle;
 import javax.swing.AbstractAction;
 import javax.swing.Action;
-import javax.swing.JMenu;
-import javax.swing.JMenuItem;
 import org.openide.DialogDisplayer;
 import org.openide.NotifyDescriptor;
+import org.openide.WizardDescriptor;
 import org.openide.actions.CopyAction;
 import org.openide.actions.CutAction;
 import org.openide.actions.DeleteAction;
@@ -46,7 +49,6 @@ import org.openide.nodes.Node;
 import org.openide.nodes.NodeTransfer;
 import org.openide.util.HelpCtx;
 import org.openide.util.NbBundle;
-import org.openide.util.actions.NodeAction;
 import org.openide.util.actions.SystemAction;
 import org.openide.util.datatransfer.NewType;
 import org.openide.util.datatransfer.PasteType;
@@ -73,7 +75,7 @@ public class SerieNode extends AbstractNode implements PropertyChangeListener {
         return new Action[] {
             getPreferredAction(),
             null,
-            SystemAction.get( NewAction.class),
+            SystemAction.get( ComicWizardAction.class),
             null,
             SystemAction.get( SortAction.class),
             null,
@@ -86,93 +88,109 @@ public class SerieNode extends AbstractNode implements PropertyChangeListener {
     
     public NewType[] getNewTypes() {
         
-        return new NewType[] { new NewType() {
-            public String getName() {
-                return bundle.getString("LBL_NewComic");
-            }
-            public HelpCtx getHelpCtx() {
-                return new HelpCtx("org.myorg.systemproperties");
-            }
-            public void create() throws IOException {
-                String title = bundle.getString("LBL_NewComic_dialog");
-                String msg = bundle.getString("MSG_NewComic_dialog");
-                String name = serie.getName();
-                NotifyDescriptor.InputLine desc = new NotifyDescriptor.InputLine(msg, title);
-                desc.setInputText(name);
-                DialogDisplayer.getDefault().notify(desc);
-                name = desc.getInputText();
-                
-                if (name.length() == 0) return;
-                
-                Comic comic = new Comic();
-                comic.setName(name);
-                comic.setNr(new Integer(getChildren().getNodesCount() + 1));
-                ComicChildren children = (ComicChildren)getChildren();
-                children.getSerie().getComics().add(comic);
-//                boolean added = children.add(new Node[]{
-//                    new ComicNode(comic)
-//                });
-//                if (added) {
-                children.addNotify();
-                    ComicTopComponent.getDefault().setComic(comic);
-                    if (!ComicTopComponent.getDefault().isOpened())
-                        ComicTopComponent.getDefault().open();
-                    ComicTopComponent.getDefault().requestActive();
-                    fireShortDescriptionChange(null, getShortDescription());
+        return new NewType[] {
+//            new NewType() {
+//                public String getName() {
+//                    return bundle.getString("LBL_NewComic");
 //                }
-            }
-        }, new NewType() {
-            public String getName() {
-                return bundle.getString("LBL_NewComics");
-            }
-            public HelpCtx getHelpCtx() {
-                return new HelpCtx("org.myorg.systemproperties");
-            }
-            public void create() throws IOException {
-                String title = bundle.getString("LBL_NewComic_dialog");
-                String msg = bundle.getString("MSG_NewComic_dialog");
-                
-                String name = serie.getName();
-                NotifyDescriptor.InputLine desc = new NotifyDescriptor.InputLine(msg, title);
-                desc.setInputText(name);
-                DialogDisplayer.getDefault().notify(desc);
-                name = desc.getInputText();
-                
-                if (name.length() == 0) return;
-                
-                title = bundle.getString("LBL_NewComicCount_dialog");
-                msg = bundle.getString("MSG_NewComicCount_dialog");
-                desc = new NotifyDescriptor.InputLine(msg, title);
-                desc.setInputText("1");
-                DialogDisplayer.getDefault().notify(desc);
-                int count = 0;
-                try {
-                    count = Integer.parseInt(desc.getInputText());
-                } catch(NumberFormatException nfe) {
-                    return;
-                }
-                
-                int nr = getChildren().getNodesCount();
-                for (int i = 1; i <= count; i++) {
-                    Comic comic = new Comic();
-                    comic.setName(name);
-                    comic.setNr(new Integer( nr +  i));
-                    ComicChildren children = (ComicChildren)getChildren();
-                    children.getSerie().getComics().add(comic);
-                    children.addNotify();
-//                    boolean added = children.add(new Node[]{
-//                        new ComicNode(comic)
+//                public HelpCtx getHelpCtx() {
+//                    return new HelpCtx("org.myorg.systemproperties");
+//                }
+//                public void create() throws IOException {
+//                    WizardDescriptor wizardDescriptor = new WizardDescriptor(new WizardDescriptor.Panel[] {
+//                        new ComicWizardPanel()
 //                    });
-//                    if (added) {
-                        ComicTopComponent.getDefault().setComic(comic);
+//                    
+//                    // {0} will be replaced by WizardDesriptor.Panel.getComponent().getName()
+//                    wizardDescriptor.setTitleFormat(new MessageFormat("{0}"));
+//                    wizardDescriptor.setTitle("New Comic");
+//                    Dialog dialog = DialogDisplayer.getDefault().createDialog(wizardDescriptor);
+//                    dialog.setVisible(true);
+//                    dialog.toFront();
+//                    boolean cancelled = wizardDescriptor.getValue() != WizardDescriptor.FINISH_OPTION;
+//                    if (!cancelled) {
+//                        ComicDB
 //                    }
-                }
-                if (!ComicTopComponent.getDefault().isOpened())
-                    ComicTopComponent.getDefault().open();
-                ComicTopComponent.getDefault().requestActive();
-                fireShortDescriptionChange(null, getShortDescription());
-            }
-        }
+//                    
+////                String title = bundle.getString("LBL_NewComic_dialog");
+////                String msg = bundle.getString("MSG_NewComic_dialog");
+////                String name = serie.getName();
+////                NotifyDescriptor.InputLine desc = new NotifyDescriptor.InputLine(msg, title);
+////                desc.setInputText(name);
+////                DialogDisplayer.getDefault().notify(desc);
+////                name = desc.getInputText();
+////
+////                if (name.length() == 0) return;
+////
+////                Comic comic = new Comic();
+////                comic.setName(name);
+////                comic.setNr(new Integer(getChildren().getNodesCount() + 1));
+////                ComicChildren children = (ComicChildren)getChildren();
+////                children.getSerie().getComics().add(comic);
+//////                boolean added = children.add(new Node[]{
+//////                    new ComicNode(comic)
+//////                });
+//////                if (added) {
+////                children.addNotify();
+////                ComicTopComponent.getDefault().setComic(comic);
+////                if (!ComicTopComponent.getDefault().isOpened())
+////                    ComicTopComponent.getDefault().open();
+////                ComicTopComponent.getDefault().requestActive();
+////                fireShortDescriptionChange(null, getShortDescription());
+//////                }
+//                }
+//            }, new NewType() {
+//                public String getName() {
+//                    return bundle.getString("LBL_NewComics");
+//                }
+//                public HelpCtx getHelpCtx() {
+//                    return new HelpCtx("org.myorg.systemproperties");
+//                }
+//                public void create() throws IOException {
+//                    String title = bundle.getString("LBL_NewComic_dialog");
+//                    String msg = bundle.getString("MSG_NewComic_dialog");
+//                    
+//                    String name = serie.getName();
+//                    NotifyDescriptor.InputLine desc = new NotifyDescriptor.InputLine(msg, title);
+//                    desc.setInputText(name);
+//                    DialogDisplayer.getDefault().notify(desc);
+//                    name = desc.getInputText();
+//                    
+//                    if (name.length() == 0) return;
+//                    
+//                    title = bundle.getString("LBL_NewComicCount_dialog");
+//                    msg = bundle.getString("MSG_NewComicCount_dialog");
+//                    desc = new NotifyDescriptor.InputLine(msg, title);
+//                    desc.setInputText("1");
+//                    DialogDisplayer.getDefault().notify(desc);
+//                    int count = 0;
+//                    try {
+//                        count = Integer.parseInt(desc.getInputText());
+//                    } catch(NumberFormatException nfe) {
+//                        return;
+//                    }
+//                    
+//                    int nr = getChildren().getNodesCount();
+//                    for (int i = 1; i <= count; i++) {
+//                        Comic comic = new Comic();
+//                        comic.setName(name);
+//                        comic.setNr(new Integer( nr +  i));
+//                        ComicChildren children = (ComicChildren)getChildren();
+//                        children.getSerie().getComics().add(comic);
+//                        children.addNotify();
+////                    boolean added = children.add(new Node[]{
+////                        new ComicNode(comic)
+////                    });
+////                    if (added) {
+//                        ComicTopComponent.getDefault().setComic(comic);
+////                    }
+//                    }
+//                    if (!ComicTopComponent.getDefault().isOpened())
+//                        ComicTopComponent.getDefault().open();
+//                    ComicTopComponent.getDefault().requestActive();
+//                    fireShortDescriptionChange(null, getShortDescription());
+//                }
+//            }
         };
     }
     
@@ -290,5 +308,5 @@ public class SerieNode extends AbstractNode implements PropertyChangeListener {
         }
         return null;
     }
-
+    
 }

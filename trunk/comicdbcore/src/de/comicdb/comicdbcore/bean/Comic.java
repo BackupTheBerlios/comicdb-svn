@@ -71,9 +71,9 @@ public class Comic extends Model implements Serializable, PropertyChangeListener
         firePropertyChange("name", oldValue, this.name);
     }
     
-    public String getDisplayName() {
-        return name + " " + nr;
-    }
+//    public String getDisplayName() {
+//        return name + " " + nr;
+//    }
     
     public String getCovertype() {
         return covertype;

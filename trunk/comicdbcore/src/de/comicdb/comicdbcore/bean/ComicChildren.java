@@ -43,7 +43,7 @@ public class ComicChildren extends Children.Keys implements Serializable, Sortab
         return new Node[] { new ComicNode( obj ) };
     }
     
-    protected void addNotify() {
+    public void addNotify() {
         super.addNotify();
         updateChildren();
     }
@@ -69,10 +69,9 @@ public class ComicChildren extends Children.Keys implements Serializable, Sortab
         ComicDBOptionUtil util = new ComicDBOptionUtil();
         ComicDBOption options = util.retrieveSetting();
         Sort sort = options.getComicSort();
-        System.out.println("getSortableItems " + sort.getProperty());
         return new SortableItem[] {
             new SortableItem("nr", "nr", sort.getProperty().equalsIgnoreCase("nr") ? sort.getOrder() : 0),
-            new SortableItem("displayName", "name", sort.getProperty().equalsIgnoreCase("displayName") ? sort.getOrder() : 0)
+            new SortableItem("name", "name", sort.getProperty().equalsIgnoreCase("name") ? sort.getOrder() : 0)
         };
     }
     

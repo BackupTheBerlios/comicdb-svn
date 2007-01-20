@@ -53,12 +53,16 @@ public class PropertyComparator implements Comparator {
 
             if (!(field2 instanceof Comparable))
                 throw new ClassCastException("Property '" + property + "' from Object 2 with Class '" + o2.getClass() + "' isn't a Comparable");
-            
+            int ret;
             // special for String 
             if (field1 instanceof String && field2 instanceof String)
-                return ((String)field1).toLowerCase().compareTo(((String)field2).toLowerCase()) * order;
-
-            return ((Comparable)field1).compareTo(field2) * order;
+                ret = ((String)field1).toLowerCase().compareTo(((String)field2).toLowerCase()) * order;
+            else 
+                ret = ((Comparable)field1).compareTo(field2) * order;
+            
+            if (ret == 0)
+                ret = 1;
+            return ret;
             
         } catch (Exception e) {
             e.printStackTrace();

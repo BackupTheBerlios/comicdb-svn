@@ -111,7 +111,6 @@ public class ComicDBNode extends AbstractNode {
     public PasteType getDropType(Transferable t, final int action, int index) {
         final Node dropNode = NodeTransfer.node( t,
                 DnDConstants.ACTION_COPY_OR_MOVE+NodeTransfer.CLIPBOARD_CUT );
-        System.out.println("ComicDBNode: " + dropNode);
         if( null != dropNode ) {
             final Publisher publisher = (Publisher)dropNode.getLookup().lookup( Publisher.class );
             int copy = action & DnDConstants.ACTION_COPY;

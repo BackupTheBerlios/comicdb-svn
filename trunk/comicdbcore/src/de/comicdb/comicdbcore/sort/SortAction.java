@@ -64,7 +64,6 @@ public final class SortAction extends NodeAction {
     }
     
 //    protected void performAction(Node[] activatedNodes) {
-//        System.out.println("performAction");
 //        for(Node node : activatedNodes) {
 //            if (node instanceof Sortable) {
 //                ((Sortable)node).setSort()
