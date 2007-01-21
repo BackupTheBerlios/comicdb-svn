@@ -26,6 +26,7 @@ import de.comicdb.comicdbcore.sort.SortableItem;
 import java.io.Serializable;
 import org.openide.nodes.Children;
 import org.openide.nodes.Node;
+import org.openide.util.NbBundle;
 
 /**
  *
@@ -71,7 +72,7 @@ public class SerieChildren extends Children.Keys implements Serializable, Sortab
         ComicDBOption options = util.retrieveSetting();
         Sort sort = options.getSerieSort();
         return new SortableItem[] {
-            new SortableItem("name", "name", sort.getOrder())
+            new SortableItem("name", NbBundle.getMessage(getClass(),"Serie.name"), sort.getOrder())
         };
     }
 
