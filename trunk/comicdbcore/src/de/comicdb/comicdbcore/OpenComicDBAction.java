@@ -41,8 +41,11 @@ public final class OpenComicDBAction extends CallableSystemAction {
 
         ComicDBOptionUtil util = new ComicDBOptionUtil();
         ComicDBOption options = util.retrieveSetting();
-
-        JFileChooser chooser = new JFileChooser(options.getLoadPath());
+        
+        JFileChooser chooser = new JFileChooser();
+        if (options.getLoadPath() != null)
+            chooser = new JFileChooser(options.getLoadPath());
+        
         chooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
         ComicFileFilter fileFilter = new ComicFileFilter();
         fileFilter.addExtension("cdb");

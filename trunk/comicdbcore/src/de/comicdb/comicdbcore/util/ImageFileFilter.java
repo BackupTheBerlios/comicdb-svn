@@ -22,7 +22,6 @@ package de.comicdb.comicdbcore.util;
 import java.io.File;
 import java.util.Hashtable;
 import java.util.Enumeration;
-import javax.swing.*;
 import javax.swing.filechooser.*;
 /**
  * @author <a href="mailto:Daniel.Moos@edv-active.de">Daniel Moos</a>

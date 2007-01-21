@@ -43,7 +43,10 @@ public final class SaveComicDBAction extends CallableSystemAction {
         ComicDBOptionUtil util = new ComicDBOptionUtil();
         ComicDBOption options = util.retrieveSetting();
         
-        JFileChooser chooser = new JFileChooser(options.getSavePath());
+        JFileChooser chooser = new JFileChooser();
+        if (options.getSavePath() != null)
+            chooser = new JFileChooser(options.getSavePath());
+        
         chooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
         ComicFileFilter fileFilter = new ComicFileFilter();
         fileFilter.addExtension("cdb");

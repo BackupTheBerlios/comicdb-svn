@@ -569,10 +569,12 @@ public final class ComicTopComponent extends TopComponent implements PropertyCha
     private void jButtonChooseImageActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonChooseImageActionPerformed
         ComicDBOptionUtil util = new ComicDBOptionUtil();
         ComicDBOption options = util.retrieveSetting();
+
+        JFileChooser chooser = new JFileChooser();
+        if (options.getImagePath() != null)
+            chooser = new JFileChooser(options.getImagePath());
         
-        JFileChooser chooser = new JFileChooser(options.getImagePath());
         chooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
-        
         chooser.setFileFilter(ImageFileFilter.getInstance());
         int ret = chooser.showOpenDialog(null);
         if (ret == JFileChooser.CANCEL_OPTION)

@@ -229,9 +229,11 @@ public final class SerieTopComponent extends TopComponent implements PropertyCha
         ComicDBOptionUtil util = new ComicDBOptionUtil();
         ComicDBOption options = util.retrieveSetting();
         
-        JFileChooser chooser = new JFileChooser(options.getImagePath());
-        chooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
+        JFileChooser chooser = new JFileChooser();
+        if (options.getImagePath() != null)
+            chooser = new JFileChooser(options.getImagePath());
         
+        chooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
         chooser.setFileFilter(ImageFileFilter.getInstance());
         int ret = chooser.showOpenDialog(null);
         if (ret == JFileChooser.CANCEL_OPTION)
