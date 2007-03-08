@@ -329,7 +329,7 @@ public class CalendarPanel extends JPanel implements ComponentListener {
     
     private class CalendarMonthCellRenderer extends DefaultListCellRenderer {
         
-        private String[] months = new String[] {"Januar", "Februar", "M�rz", "April", "Mai", "Juni", "Juli", "August", "September", "Oktober", "November", "Dezember" };
+        private String[] months = new String[] {"Januar", "Februar", "März", "April", "Mai", "Juni", "Juli", "August", "September", "Oktober", "November", "Dezember" };
         
         public CalendarMonthCellRenderer()  {
             super();

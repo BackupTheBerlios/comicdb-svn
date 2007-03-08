@@ -86,6 +86,7 @@ public final class ComicTopComponent extends TopComponent implements PropertyCha
         comicTypes.add(NbBundle.getMessage(ComicTopComponent.class, "LBL_COMIC_COMICTYPE_MAGAZINE"));
         comicTypes.add(NbBundle.getMessage(ComicTopComponent.class, "LBL_COMIC_COMICTYPE_BOOK"));
         comicTypes.add(NbBundle.getMessage(ComicTopComponent.class, "LBL_COMIC_COMICTYPE_PICCOLO"));
+        comicTypes.add(NbBundle.getMessage(ComicTopComponent.class, "LBL_COMIC_COMICTYPE_USCOMIC"));
     }
     
     private void initCoverTypes() {

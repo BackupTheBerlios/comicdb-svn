@@ -73,12 +73,8 @@ public class ComicDBOptionUtil {
             ObjectInputStream objectInStr = new ObjectInputStream(settingFile.getInputStream());
             option = (ComicDBOption) objectInStr.readObject();
             objectInStr.close();
-        } catch (IOException ex) {
-            ex.printStackTrace();
-            return null;
-        } catch (ClassNotFoundException ex) {
-            ex.printStackTrace();
-            return null;
+        } catch (Exception e) {
+            option = new ComicDBOption();
         }
         return option;
     }
