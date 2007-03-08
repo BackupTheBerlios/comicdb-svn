@@ -5,4 +5,19 @@
 <project name="comicdb" basedir=".">
     <description>Builds the module suite comicdb.</description>
     <import file="nbproject/build-impl.xml"/>
+    
+    <target name="build-unzip" depends="build,build-launchers,build-zip" description="Unpack a ZIP distribution of the suite.">
+        <unzip dest="dist" src="dist/${app.name}.zip"/>
+    </target>
+    
+    <target name ="izpack" depends="build,build-launchers,build-zip,build-unzip" description="Create an Installer."> 
+        <taskdef name="izpack" classpath="${basedir}/lib/standalone-compiler.jar" classname="com.izforge.izpack.ant.IzPackTask"/>
+        <echo message="Makes the installer using IzPack"/>
+        <izpack input="${basedir}/IzPack-install.xml"
+                output="${basedir}/dist/comicdb-install.jar"
+                installerType="standard"
+                basedir="${basedir}"
+                izPackDir="${basedir}/IzPack"/>
+    </target>
+    
 </project>

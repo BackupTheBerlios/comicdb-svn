@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="iso-8859-1" standalone="yes" ?>
+<installation version="1.0">
+    <info>
+        <appname>comicb Installation</appname>
+        <appversion>1.0 beta</appversion>
+        <authors>
+            <author name="Daniel Moos" email="wolverine78@berlios.de"/>
+        </authors>
+        <url>http://www.comicdb.de</url>
+    </info>
+    <guiprefs width="640" height="480" resizable="no"/>
+    <locale>
+        <langpack iso3="deu"/>
+        <langpack iso3="eng"/>
+    </locale>
+    <resources>
+        <res id="LicencePanel.licence" src="gpl.txt"/>
+    </resources>
+    <panels>
+        <panel classname="HelloPanel"/>
+        <panel classname="LicencePanel"/>
+        <panel classname="TargetPanel"/> 
+        <panel classname="PacksPanel"/>
+        <panel classname="InstallPanel"/>
+        <panel classname="FinishPanel"/>
+    </panels>
+    <packs>
+        <pack name="Base" required="yes">
+            <description>The base files</description>
+            <file src="gpl.txt" targetdir="$INSTALL_PATH"/>
+            <file src="dist/comicdb" targetdir="$INSTALL_PATH"/>
+            <file src="comicdb.conf" targetdir="$INSTALL_PATH/comicdb/etc/"/>
+            <parsable targetfile="$INSTALL_PATH/bibliosphere/etc/comicdb.conf"/>
+        </pack>
+    </packs>
+</installation>
